@@ -1,8 +1,33 @@
 {
     "name": "webysther/composer-plugin-qa",
+    "description": "A full featured composer plugin for PHP QA Tools.",
+    "keywords": ["php", "qa", "tools"],
     "type": "composer-plugin",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Webysther Nunes",
+            "email": "webysther@gmail.com"
+        }
+    ],
     "require": {
         "composer-plugin-api": "^1.0"
+    },
+  "require-dev": {
+        "behat/behat": "@stable",
+        "brianium/paratest": "@stable",
+        "friendsofphp/php-cs-fixer": "@stable",
+        "phploc/phploc": "@stable",
+        "phpmd/phpmd" : "@stable",
+        "phpmetrics/phpmetrics": "@stable",
+        "phpunit/dbunit": "@stable",
+        "phpunit/phpcov": "@stable",
+        "sebastian/phpcpd": "@stable",
+        "sensiolabs/security-checker": "@stable",
+        "squizlabs/php_codesniffer": "@stable"
+    },
+    "suggest": {
+        "hirak/prestissimo": "Composer parallel install plugin"
     },
     "extra": {
         "class": "Webs\\QA"
