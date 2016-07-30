@@ -13,18 +13,8 @@
     "require": {
         "composer-plugin-api": "^1.0"
     },
-  "require-dev": {
-        "behat/behat": "@stable",
-        "brianium/paratest": "@stable",
-        "friendsofphp/php-cs-fixer": "@stable",
-        "phploc/phploc": "@stable",
-        "phpmd/phpmd" : "@stable",
-        "phpmetrics/phpmetrics": "@stable",
-        "phpunit/dbunit": "@stable",
-        "phpunit/phpcov": "@stable",
-        "sebastian/phpcpd": "@stable",
-        "sensiolabs/security-checker": "@stable",
-        "squizlabs/php_codesniffer": "@stable"
+    "require-dev": {
+        "webysther/composer-meta-qa": "dev-master"
     },
     "suggest": {
         "hirak/prestissimo": "Composer parallel install plugin"
