@@ -11,10 +11,9 @@
         }
     ],
     "require": {
-        "composer-plugin-api": "^1.0"
-    },
-    "require-dev": {
-        "webysther/composer-meta-qa": "dev-master"
+        "composer-plugin-api": "^1.0",
+        "webysther/composer-meta-qa": "~1.0",
+        "twig/twig": ">1.20.0"
     },
     "suggest": {
         "hirak/prestissimo": "Composer parallel install plugin"
