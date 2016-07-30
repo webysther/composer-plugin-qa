@@ -1,0 +1,10 @@
+{
+    "name": "webysther/composer-plugin-qa",
+    "type": "composer-plugin",
+    "require": {
+        "composer-plugin-api": "^1.0"
+    },
+    "extra": {
+        "class": "Webs\\QA"
+    }
+}
