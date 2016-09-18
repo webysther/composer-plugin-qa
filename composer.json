@@ -18,6 +18,11 @@
     "suggest": {
         "hirak/prestissimo": "Composer parallel install plugin"
     },
+    "autoload": {
+        "psr-4": {
+          "Webs\\QA\\": "src"
+        }
+    },
     "extra": {
         "class": "Webs\\QA"
     }

@@ -1,6 +1,7 @@
 language: php
 
 php:
+  - 7.1
   - 7.0
   - 5.6
   - 5.5
@@ -11,6 +12,8 @@ php:
 script:
   # Update composer to latest version.
   - composer self-update || true
+  # For faster installing
+  - composer global require hirak/prestissimo
   # Validate composer.json file.
   - composer validate
   # Try to install all requirements.
