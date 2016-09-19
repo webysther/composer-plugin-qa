@@ -9,7 +9,8 @@ class Provider implements CommandProviderCapability
     public function getCommands()
     {
         return array(
-            new CopyPasteDetector
+            new CopyPasteDetector,
+            new CPD
         );
     }
 }
