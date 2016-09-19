@@ -24,6 +24,6 @@
         }
     },
     "extra": {
-        "class": "Webs\\QA"
+        "class": "Webs\\QA\\Plugin"
     }
 }
