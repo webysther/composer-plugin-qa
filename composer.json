@@ -18,6 +18,7 @@
         "webysther/composer-meta-qa": "~1.0.2"
     },
     "suggest": {
+        "webysther/composer-meta-qa": "Automatic install all QA tools",
         "hirak/prestissimo": "Composer parallel install plugin"
     },
     "autoload": {
