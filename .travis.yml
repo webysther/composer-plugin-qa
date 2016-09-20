@@ -17,6 +17,6 @@ script:
   # Validate composer.json file.
   - composer validate
   # Try to install all requirements.
-  - composer install
+  - composer update
   # Check if there is a security issue with the required packages.
   - vendor/bin/security-checker security:check
