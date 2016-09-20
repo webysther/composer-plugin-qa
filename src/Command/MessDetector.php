@@ -37,7 +37,7 @@ class MessDetector extends BaseCommand
 
         $md = 'vendor/bin/phpmd';
         if(!file_exists($md)){
-            $process = new Process('phpmd --help');
+            $process = new Process('phpmd --version'); // --help return exit 1
             $process->run();
             if ($process->isSuccessful()) {
                 $md = 'phpmd';
