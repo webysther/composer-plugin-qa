@@ -8,11 +8,49 @@
 
 Comprehensive [plugin for composer](https://getcomposer.org/doc/articles/plugins.md#creating-a-plugin)
  to execute [PHP QA Tools](http://phpqatools.org) in a uniform and simple way.
+ 
+## Install
 
-For others plugins for composer [see](https://packagist.org/search/?q=type=composer-plugin).
+Add to composer.json:
 
-PHP Quality Assurance Tools
-==========
+```json
+"require-dev": {
+    "webysther/composer-plugin-qa": "~1.0",
+    "webysther/composer-meta-qa": "~1.0"
+}
+```
+
+List the options
+
+```bash
+$ composer list
+ qa
+  qa:all                    Run all tools
+  qa:code-coverage          Code Coverage
+  qa:cc                     Code Coverage
+  qa:code-beautifier-fixer  Code Beautifier and Fixer
+  qa:cbf                    Code Beautifier and Fixer
+  qa:copy-paste-detector    Copy/Paste Detector
+  qa:cpd                    Copy/Paste Detector
+  qa:code-sniffer           Code Sniffer
+  qa:cs                     Code Sniffer
+  qa:php-cs-fixer           PHP Code Sniffer Fixer
+  qa:csf                    PHP Code Sniffer Fixer
+  qa:line-of-code           Line of Code
+  qa:loc                    Line of Code
+  qa:mess-detector          Mess Detector
+  qa:md                     Mess Detector
+  qa:php-metrics            PHP Metrics
+  qa:pm                     PHP Metrics
+  qa:security-checker       SecurityChecker
+  qa:sc                     SecurityChecker
+  qa:test                   Tests
+
+```
+
+All plugins (except ```qa:test```) have the short version, example,```qa:sc``` is short version for ```qa:security-checker```.
+
+## PHP Quality Assurance Tools
 
 This is a composer meta package for installing PHP Quality Assurance Tools with only one dependency, based on [h4cc/phpqatools](https://github.com/h4cc/phpqatools).
 
