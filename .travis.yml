@@ -19,4 +19,4 @@ script:
   # Try to install all requirements.
   - composer install
   # Check if there is a security issue with the required packages.
-  - bin/security-checker security:check composer.lock
+  - vendor/bin/security-checker security:check
