@@ -2,23 +2,23 @@
 
 namespace Webs\QA\Command;
 
-use Composer\Command\BaseCommand;
-use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Process\Exception\ProcessFailedException;
+use Composer\Command\BaseCommand;
 use Symfony\Component\Process\Process;
+use Symfony\Component\Process\Exception\ProcessFailedException;
+use Symfony\Component\Console\Input\InputArgument;
 
-class CopyPasteDetector extends BaseCommand
+class LineOfCode extends BaseCommand
 {
     protected $input;
     protected $output;
     protected $source = array('src','app','tests');
-    protected $description = 'Copy/Paste Detector';
+    protected $description = 'Line of Code';
 
     protected function configure()
     {
-        $this->setName('qa:copy-paste-detector')
+        $this->setName('qa:line-of-code')
             ->setDescription($this->description)
             ->addArgument(
                 'source',
@@ -34,18 +34,18 @@ class CopyPasteDetector extends BaseCommand
         $this->output = $output;
         $this->output->writeln('<comment>Running ' . $this->description . '...</comment>');
 
-        $cpd = 'vendor/bin/phpcpd';
-        if(!file_exists($cpd)){
-            $process = new Process('phpcpd --help');
+        $loc = 'vendor/bin/phploc';
+        if(!file_exists($loc)){
+            $process = new Process('phploc --help');
             $process->run();
             if ($process->isSuccessful()) {
-                $cpd = 'phpcpd';
+                $loc = 'phploc';
             } else {
                 throw new ProcessFailedException($process);
             }
         }
 
-        $cmd = $cpd . ' ' . $this->getSource() . ' --ansi --fuzzy';
+        $cmd = $loc . ' ' . $this->getSource() . ' --ansi --count-tests';
         $process = new Process($cmd);
         $command = $this;
         $process->run(function($type, $buffer) use($command){

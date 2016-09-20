@@ -10,7 +10,25 @@ class Provider implements CommandProviderCapability
     {
         return array(
             new CopyPasteDetector,
-            new CPD
+            new CPD,
+            new LineOfCode,
+            new LOC,
+            new CodeSniffer,
+            new CS,
+            new MessDetector,
+            new MD,
+            new CodeCoverage,
+            new CC,
+            new CodeBeautifierFixer,
+            new CBF,
+            new Test,
+            new PHPCSFixer,
+            new CSF,
+            new PHPMetrics,
+            new PM,
+            new SecurityChecker,
+            new SC,
+            new All
         );
     }
 }

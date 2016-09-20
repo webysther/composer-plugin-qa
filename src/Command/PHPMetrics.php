@@ -5,20 +5,21 @@ namespace Webs\QA\Command;
 use Composer\Command\BaseCommand;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Process\Exception\ProcessFailedException;
 use Symfony\Component\Process\Process;
 
-class CopyPasteDetector extends BaseCommand
+class PHPMetrics extends BaseCommand
 {
     protected $input;
     protected $output;
     protected $source = array('src','app','tests');
-    protected $description = 'Copy/Paste Detector';
+    protected $description = 'PHP Metrics';
 
     protected function configure()
     {
-        $this->setName('qa:copy-paste-detector')
+        $this->setName('qa:php-metrics')
             ->setDescription($this->description)
             ->addArgument(
                 'source',
@@ -34,28 +35,42 @@ class CopyPasteDetector extends BaseCommand
         $this->output = $output;
         $this->output->writeln('<comment>Running ' . $this->description . '...</comment>');
 
-        $cpd = 'vendor/bin/phpcpd';
-        if(!file_exists($cpd)){
-            $process = new Process('phpcpd --help');
+        $pm = 'vendor/bin/phpmetrics';
+        if(!file_exists($pm)){
+            $process = new Process('phpmetrics --help');
             $process->run();
             if ($process->isSuccessful()) {
-                $cpd = 'phpcpd';
+                $pm = 'phpmetrics';
             } else {
                 throw new ProcessFailedException($process);
             }
         }
 
-        $cmd = $cpd . ' ' . $this->getSource() . ' --ansi --fuzzy';
-        $process = new Process($cmd);
-        $command = $this;
-        $process->run(function($type, $buffer) use($command){
-            $command->output->writeln($buffer);
-        });
+        $process = new Process($pm . ' --version');
+        $process->run();
+        $this->output->writeln($process->getOutput());
+
+        $sources = $this->getSource();
+        $exitCode = 0;
+        foreach ($sources as $source) {
+            $cmd = $pm . ' --report-cli --ansi --excluded-dirs=\'.git\' ' . $source;
+            $this->output->writeln('<comment>Command executing `' . $cmd . '`</comment>');
+            $process = new Process($cmd);
+            $process->setTimeout(3600);
+            $command = $this;
+            $process->run(function($type, $buffer) use($command){
+                $command->output->write($buffer);
+            });
+
+            if(!$exitCode){
+                $exitCode = $process->getExitCode();
+            }
+        }
+
         $end = microtime(true);
         $time = round($end-$start);
-
-        $this->output->writeln('<comment>Command executed `' . $cmd . '` in ' . $time . ' seconds</comment>');
-        exit($process->getExitCode());
+        $this->output->writeln('<comment>All executed in ' . $time . ' seconds</comment>');
+        exit($exitCode);
     }
 
     protected function getSource()
@@ -71,6 +86,6 @@ class CopyPasteDetector extends BaseCommand
             }
         }
 
-        return implode(' ', $dirs);
+        return $dirs;
     }
 }

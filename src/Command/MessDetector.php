@@ -2,23 +2,24 @@
 
 namespace Webs\QA\Command;
 
-use Composer\Command\BaseCommand;
-use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Process\Exception\ProcessFailedException;
+use Composer\Command\BaseCommand;
 use Symfony\Component\Process\Process;
+use Symfony\Component\Process\Exception\ProcessFailedException;
+use Symfony\Component\Console\Input\InputArgument;
+use Symfony\Component\Console\Input\InputOption;
 
-class CopyPasteDetector extends BaseCommand
+class MessDetector extends BaseCommand
 {
     protected $input;
     protected $output;
     protected $source = array('src','app','tests');
-    protected $description = 'Copy/Paste Detector';
+    protected $description = 'Mess Detector';
 
     protected function configure()
     {
-        $this->setName('qa:copy-paste-detector')
+        $this->setName('qa:mess-detector')
             ->setDescription($this->description)
             ->addArgument(
                 'source',
@@ -34,28 +35,44 @@ class CopyPasteDetector extends BaseCommand
         $this->output = $output;
         $this->output->writeln('<comment>Running ' . $this->description . '...</comment>');
 
-        $cpd = 'vendor/bin/phpcpd';
-        if(!file_exists($cpd)){
-            $process = new Process('phpcpd --help');
+        $md = 'vendor/bin/phpmd';
+        if(!file_exists($md)){
+            $process = new Process('phpmd --help');
             $process->run();
             if ($process->isSuccessful()) {
-                $cpd = 'phpcpd';
+                $md = 'phpmd';
             } else {
                 throw new ProcessFailedException($process);
             }
         }
 
-        $cmd = $cpd . ' ' . $this->getSource() . ' --ansi --fuzzy';
+        $process = new Process($md . ' --version');
+        $process->run();
+        $this->output->writeln($process->getOutput());
+
+        $cmd = $md . ' ' . $this->getSource() . ' text phpmd.xml';
+
         $process = new Process($cmd);
-        $command = $this;
-        $process->run(function($type, $buffer) use($command){
-            $command->output->writeln($buffer);
-        });
+        $process->setTimeout(3600);
+        $process->run();
         $end = microtime(true);
         $time = round($end-$start);
 
+        $this->output->writeln($this->format($process->getOutput()));
         $this->output->writeln('<comment>Command executed `' . $cmd . '` in ' . $time . ' seconds</comment>');
         exit($process->getExitCode());
+    }
+
+    /**
+     * @todo  Make PR for this
+     */
+    protected function format($file)
+    {
+        $file = @file_get_contents("phpmd.log") ;
+        $file = str_replace(PHP_EOL, " \033[0m ".PHP_EOL, $file);
+        $file = str_replace(realpath(__DIR__."/..")."/", '', $file);
+        $file = str_replace("\t", " \033[1;31m " . PHP_EOL, $file);
+        return str_replace(". ", ".".PHP_EOL, $file);
     }
 
     protected function getSource()
@@ -71,6 +88,6 @@ class CopyPasteDetector extends BaseCommand
             }
         }
 
-        return implode(' ', $dirs);
+        return implode(',', $dirs);
     }
 }

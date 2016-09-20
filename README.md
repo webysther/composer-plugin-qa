@@ -6,7 +6,34 @@
 
 # Composer Plugin for QA
 
-[Plugin for composer](https://getcomposer.org/doc/articles/plugins.md#creating-a-plugin)
- to execute [PHP QA Tools](http://phpqatools.org).
+Comprehensive [plugin for composer](https://getcomposer.org/doc/articles/plugins.md#creating-a-plugin)
+ to execute [PHP QA Tools](http://phpqatools.org) in a uniform and simple way.
 
 For others plugins for composer [see](https://packagist.org/search/?q=type=composer-plugin).
+
+PHP Quality Assurance Tools
+==========
+
+This is a composer meta package for installing PHP Quality Assurance Tools with only one dependency, based on [h4cc/phpqatools](https://github.com/h4cc/phpqatools).
+
+Included in this package (based on [phpqatools](http://phpqatools.org/)) are:
+
+- [PHPUnit](https://github.com/sebastianbergmann/phpunit): Testing Framework
+- [PHPCOV](https://github.com/sebastianbergmann/phpcov): CLI frontend for the [PHP_CodeCoverage](https://github.com/sebastianbergmann/php-code-coverage)
+- [Paratest](https://github.com/brianium/paratest): Parallel testing for PHPUnit
+- [DbUnit](https://github.com/sebastianbergmann/dbunit): Puts your database into a known state between test runs
+- [PHPLOC](https://github.com/sebastianbergmann/phploc): A tool for quickly measuring the size of a PHP project
+- [PHPCPD](https://github.com/sebastianbergmann/phpcpd): Copy/Paste Detector
+- [PHP_Depend](https://github.com/pdepend/pdepend): Quality of your design in the terms of extensibility, reusability and maintainability
+- [PHPMD](https://github.com/phpmd/phpmd): User friendly frontend application for the raw metrics stream measured by PHP Depend
+- [PhpMetrics](https://github.com/phpmetrics/PhpMetrics): Static analysis tool, gives metrics about PHP project and classes
+- [PHP_CodeSniffer](https://github.com/squizlabs/PHP_CodeSniffer): Detects violations of a defined set of coding standards
+
+Plus: 
+
+- [PHP-CS-Fixer](https://github.com/FriendsOfPHP/PHP-CS-Fixer): A tool to automatically fix coding standards issues
+- [Security-Checker](https://github.com/sensiolabs/security-checker): Checks if your application uses dependencies with known security vulnerabilities
+
+Suggest install:
+
+- [Prestissimo](https://github.com/hirak/prestissimo): Composer parallel install plugin
