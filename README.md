@@ -9,6 +9,36 @@
 Comprehensive [plugin for composer](https://getcomposer.org/doc/articles/plugins.md#creating-a-plugin)
  to execute [PHP QA Tools](http://phpqatools.org) in a uniform and simple way.
  
+## Features
+
+- Automatic check if exists src,app,test and use by default
+- Check if binary is in ```vendor/bin``` or globally installed
+- Show ```--version``` for all started commands, only few tools show this information
+- Total Execution time
+- Command executed by the wrapper
+
+## Sample
+
+```bash
+$ cd /sample
+$ composer qa:cpd
+
+Running Copy/Paste Detector...
+phpcpd 2.0.4 by Sebastian Bergmann.
+
+
+Found 1 exact clones with 654 duplicated lines in 2 files:
+ 
+  -	/sample/tests/Folha/Durin/Models/News/NewstextTest.php:73-132
+ 	/sample/tests/Folha/Durin/Adapters/Resource/News/NewstextResourceTest.php:59-118
+ 
+0.08% duplicated lines out of 58771 total lines of code.
+
+Time: 1.31 seconds, Memory: 46.25MB
+
+Command executed `phpcpd app tests --ansi --fuzzy` in 1 seconds
+```
+
 ## Install
 
 Add to composer.json:
