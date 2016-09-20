@@ -55,7 +55,7 @@ class CodeCoverage extends BaseCommand
         (new Process('rm -rf coverage'))->run();
 
         mkdir('coverage');
-        $cmd = $cc . ' tests/Folha/Durin/Adapters/Resource/Guia --colors --coverage-php=coverage/result.cov';
+        $cmd = $cc . ' --colors --coverage-php=coverage/result.cov';
         $this->output->writeln('<comment>Command executing ' . $cmd . '</comment>');
         $process = new Process($cmd);
         $process->setTimeout(3600);
