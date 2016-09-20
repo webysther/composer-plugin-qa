@@ -50,6 +50,12 @@ Add to composer.json:
 }
 ```
 
+Or install globally:
+
+```bash
+composer global require webysther/composer-plugin-qa
+```
+
 List the options
 
 ```bash
