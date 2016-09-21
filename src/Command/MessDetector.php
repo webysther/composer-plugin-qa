@@ -66,13 +66,12 @@ class MessDetector extends BaseCommand
     /**
      * @todo  Make PR for this
      */
-    protected function format($file)
+    protected function format($output)
     {
-        $file = @file_get_contents("phpmd.log") ;
-        $file = str_replace(PHP_EOL, " \033[0m ".PHP_EOL, $file);
-        $file = str_replace(realpath(__DIR__."/..")."/", '', $file);
-        $file = str_replace("\t", " \033[1;31m " . PHP_EOL, $file);
-        return str_replace(". ", ".".PHP_EOL, $file);
+        $output = str_replace(PHP_EOL, " \033[0m ".PHP_EOL, $output);
+        $output = str_replace(realpath(__DIR__."/..")."/", '', $output);
+        $output = str_replace("\t", " \033[1;31m " . PHP_EOL, $output);
+        return str_replace(". ", ".".PHP_EOL, $output);
     }
 
     protected function getSource()
