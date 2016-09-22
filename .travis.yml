@@ -26,6 +26,4 @@ script:
   - composer qa:copy-paste-detector
   - composer qa:line-of-code
   - composer qa:mess-detector
-  - composer qa:php-cs-fixer
-  - composer qa:php-metrics
   - composer qa:security-checker
