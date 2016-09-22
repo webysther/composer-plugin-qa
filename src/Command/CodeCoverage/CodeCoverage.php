@@ -45,7 +45,7 @@ class CodeCoverage extends BaseCommand
                 'fail-coverage-less-than',
                 null,
                 InputOption::VALUE_REQUIRED,
-                'Fail if covered lines is less than the value. Default:80%',
+                'Fail if covered lines is less than the value.',
                 80
             )
             ->setDescription($this->description);
