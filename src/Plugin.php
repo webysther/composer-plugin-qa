@@ -31,8 +31,7 @@ class Plugin implements PluginInterface, Capable
     public function getCapabilities()
     {
         return array(
-            'Composer\Plugin\Capability\CommandProvider' => 'Webs\QA\Command\Provider',
-            'Composer\Plugin\Capability\CommandProvider' => 'Webs\QA\Command\ProviderShort'
+            'Composer\Plugin\Capability\CommandProvider' => 'Webs\QA\Command\Provider'
         );
     }
 }

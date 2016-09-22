@@ -22,7 +22,7 @@ use Webs\QA\Command\Test\ParaTest as ParaTest;
 use Webs\QA\Command\Test\Test as Test;
 
 /**
- * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * Provider of commands for plugin
  */
 class Provider implements CommandProviderCapability
 {
@@ -33,19 +33,23 @@ class Provider implements CommandProviderCapability
      */
     public function getCommands()
     {
-        return array(
-            new CodeBeautifierFixer(),
-            new CodeCoverage(),
-            new CodeSniffer(),
-            new CopyPasteDetector(),
-            new Fixer(),
-            new LineOfCode(),
-            new MessDetector(),
-            new ParaTest(),
-            new PHPCSFixer(),
-            new PHPMetrics(),
-            new SecurityChecker(),
-            new Test()
+        $short = new ProviderShort();
+        return array_merge(
+            $short->getCommands(),
+            array(
+                new CodeBeautifierFixer(),
+                new CodeCoverage(),
+                new CodeSniffer(),
+                new CopyPasteDetector(),
+                new Fixer(),
+                new LineOfCode(),
+                new MessDetector(),
+                new ParaTest(),
+                new PHPCSFixer(),
+                new PHPMetrics(),
+                new SecurityChecker(),
+                new Test()
+            )
         );
     }
 }
