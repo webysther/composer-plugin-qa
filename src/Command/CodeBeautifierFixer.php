@@ -8,7 +8,6 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
-use Symfony\Component\Process\Exception\ProcessFailedException;
 use Symfony\Component\Process\Process;
 
 class CodeBeautifierFixer extends BaseCommand
@@ -22,7 +21,7 @@ class CodeBeautifierFixer extends BaseCommand
             ->setDescription($this->description)
             ->addArgument(
                 'source',
-                InputArgument::IS_ARRAY|InputArgument::OPTIONAL,
+                InputArgument::IS_ARRAY | InputArgument::OPTIONAL,
                 'List of directories/files to search <comment>[Default:"src,app,tests"]</>'
             )
             ->addOption(
@@ -43,8 +42,8 @@ class CodeBeautifierFixer extends BaseCommand
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $start = microtime(true);
-        $io = new SymfonyStyle($input, $output);
-        $io->title($this->description);
+        $style = new SymfonyStyle($input, $output);
+        $style->title($this->description);
 
         $util = new Util();
         $cbf = $util->checkBinary('phpcbf');
@@ -56,13 +55,14 @@ class CodeBeautifierFixer extends BaseCommand
 
         if (empty($source)) {
             $output->writeln('<error>No files found</>');
-            $io->newLine();
+            $style->newLine();
+
             return 1;
         }
 
-        $cmd = $cbf . ' --standard='.$input->getOption('standard') . ' ' . $source;
-        $output->writeln('<info>Command: ' . $cmd . '</>');
-        $io->newLine();
+        $cmd = $cbf.' --standard='.$input->getOption('standard').' '.$source;
+        $output->writeln('<info>Command: '.$cmd.'</>');
+        $style->newLine();
         $process = new Process($cmd);
         $exitCode = $process->setTimeout(3600)->run();
 
@@ -70,7 +70,8 @@ class CodeBeautifierFixer extends BaseCommand
         if (strpos($process->getOutput(), 'No fixable errors were found') !== false) {
             $changes = false;
             $output->writeln('<info>No changes</>');
-            $io->newLine();
+            $style->newLine();
+
             return 0;
         }
 
@@ -78,23 +79,24 @@ class CodeBeautifierFixer extends BaseCommand
         if ($changes && !empty($changed)) {
             $output->writeln(str_replace(' ', PHP_EOL, $changed));
             $sources = explode(' ', $changed);
-            $io->newLine();
+            $style->newLine();
 
             foreach ($sources as $source) {
                 $git = 'git -c color.ui=always';
                 $options = '--compaction-heuristic -U0 --patch --minimal --patience';
-                $process = new Process($git . ' diff ' . $options . ' ' . $source);
+                $process = new Process($git.' diff '.$options.' '.$source);
                 $process->run();
                 $output->writeln($process->getOutput());
             }
         }
 
         $end = microtime(true);
-        $time = round($end-$start);
+        $time = round($end - $start);
 
-        $io->section("Results");
-        $output->writeln('<info>Time: ' . $time . ' seconds</>');
-        $io->newLine();
+        $style->section('Results');
+        $output->writeln('<info>Time: '.$time.' seconds</>');
+        $style->newLine();
+
         return $exitCode;
     }
 }

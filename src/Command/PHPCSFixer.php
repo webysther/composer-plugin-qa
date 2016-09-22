@@ -7,7 +7,6 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Process\Exception\ProcessFailedException;
 use Symfony\Component\Process\Process;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
@@ -21,7 +20,7 @@ class PHPCSFixer extends BaseCommand
             ->setDescription($this->description)
             ->addArgument(
                 'source',
-                InputArgument::IS_ARRAY|InputArgument::OPTIONAL,
+                InputArgument::IS_ARRAY | InputArgument::OPTIONAL,
                 'List of directories to search <comment>[Default:"src,app,tests"]</>'
             )
             ->addOption(
@@ -48,8 +47,8 @@ class PHPCSFixer extends BaseCommand
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $start = microtime(true);
-        $io = new SymfonyStyle($input, $output);
-        $io->title($this->description);
+        $style = new SymfonyStyle($input, $output);
+        $style->title($this->description);
 
         $util = new Util();
         $csf = $util->checkBinary('php-cs-fixer');
@@ -65,13 +64,13 @@ class PHPCSFixer extends BaseCommand
         }
 
         $standard = strtolower($input->getOption('standard'));
-        $standards = '--level=' . str_replace(',', ' --level=', $standard);
+        $standards = '--level='.str_replace(',', ' --level=', $standard);
         $sources = explode(' ', $source);
         $exitCode = 0;
         foreach ($sources as $source) {
-            $cmd = $csf . ' fix ' . $source . ' --ansi '. $standards . $option;
-            $output->writeln('<info>Command: ' . $cmd . '</>');
-            $io->newLine();
+            $cmd = $csf.' fix '.$source.' --ansi '.$standards.$option;
+            $output->writeln('<info>Command: '.$cmd.'</>');
+            $style->newLine();
             $process = new Process($cmd);
             $process->setTimeout(3600)->run();
             $output->writeln($process->getOutput());
@@ -82,11 +81,12 @@ class PHPCSFixer extends BaseCommand
         }
 
         $end = microtime(true);
-        $time = round($end-$start);
+        $time = round($end - $start);
 
-        $io->section("Results");
-        $output->writeln('<info>Time: ' . $time . ' seconds</>');
-        $io->newLine();
+        $style->section('Results');
+        $output->writeln('<info>Time: '.$time.' seconds</>');
+        $style->newLine();
+
         return $exitCode;
     }
 }

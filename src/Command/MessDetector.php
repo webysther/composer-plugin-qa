@@ -8,7 +8,6 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
-use Symfony\Component\Process\Exception\ProcessFailedException;
 use Symfony\Component\Process\Process;
 
 class MessDetector extends BaseCommand
@@ -21,7 +20,7 @@ class MessDetector extends BaseCommand
             ->setDescription($this->description)
             ->addArgument(
                 'source',
-                InputArgument::IS_ARRAY|InputArgument::OPTIONAL,
+                InputArgument::IS_ARRAY | InputArgument::OPTIONAL,
                 'List of directories/files to search <comment>[Default:"src,app,tests"]</>'
             )
             ->addOption(
@@ -35,29 +34,30 @@ class MessDetector extends BaseCommand
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $start = microtime(true);
-        $io = new SymfonyStyle($input, $output);
-        $io->title($this->description);
+        $style = new SymfonyStyle($input, $output);
+        $style->title($this->description);
 
         $util = new Util();
-        $md = $util->checkBinary('phpmd');
-        $output->writeln($util->checkVersion($md));
+        $phpmd = $util->checkBinary('phpmd');
+        $output->writeln($util->checkVersion($phpmd));
         $source = $util->checkSource($input, ',');
         if ($input->getOption('diff')) {
             $source = $util->getDiffSource(',');
         }
 
-        $cmd = $md . ' ' . $source . ' text phpmd.xml';
-        $output->writeln('<info>Command: ' . $cmd . '</>');
-        $io->newLine();
+        $cmd = $phpmd.' '.$source.' text phpmd.xml';
+        $output->writeln('<info>Command: '.$cmd.'</>');
+        $style->newLine();
         $process = new Process($cmd);
         $exitCode = $process->setTimeout(3600)->run();
         $output->writeln($this->format($process->getOutput()));
         $end = microtime(true);
-        $time = round($end-$start);
+        $time = round($end - $start);
 
-        $io->section("Results");
-        $output->writeln('<info>Time: ' . $time . ' seconds</>');
-        $io->newLine();
+        $style->section('Results');
+        $output->writeln('<info>Time: '.$time.' seconds</>');
+        $style->newLine();
+
         return $exitCode;
     }
 
@@ -67,8 +67,9 @@ class MessDetector extends BaseCommand
     protected function format($output)
     {
         $output = str_replace(PHP_EOL, " \033[0m ".PHP_EOL, $output);
-        $output = str_replace(realpath(__DIR__."/..")."/", '', $output);
-        $output = str_replace("\t", " \033[1;31m " . PHP_EOL, $output);
-        return str_replace(". ", ".".PHP_EOL, $output);
+        $output = str_replace(realpath(__DIR__.'/..').'/', '', $output);
+        $output = str_replace("\t", " \033[1;31m ".PHP_EOL, $output);
+
+        return str_replace('. ', '.'.PHP_EOL, $output);
     }
 }

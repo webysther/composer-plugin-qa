@@ -8,7 +8,6 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
-use Symfony\Component\Process\Exception\ProcessFailedException;
 use Symfony\Component\Process\Process;
 
 class CodeCoverage extends BaseCommand
@@ -21,7 +20,7 @@ class CodeCoverage extends BaseCommand
         $this->setName('qa:code-coverage')
             ->addArgument(
                 'source',
-                InputArgument::IS_ARRAY|InputArgument::OPTIONAL,
+                InputArgument::IS_ARRAY | InputArgument::OPTIONAL,
                 'List of directories/files to search'
             )
             ->addOption(
@@ -39,23 +38,23 @@ class CodeCoverage extends BaseCommand
         $start = microtime(true);
         $this->output = $output;
         $command = $this;
-        $io = new SymfonyStyle($input, $output);
-        $io->title($this->description);
+        $style = new SymfonyStyle($input, $output);
+        $style->title($this->description);
 
         $util = new Util();
-        $cc = $util->checkBinary('paratest');
-        $output->writeln($util->checkVersion($cc));
+        $paratest = $util->checkBinary('paratest');
+        $output->writeln($util->checkVersion($paratest));
 
         $source = '';
         if ($input->getArgument('source')) {
-            $source = ' ' . $util->checkSource($input);
+            $source = ' '.$util->checkSource($input);
         }
 
         (new Process('rm -rf coverage'))->run();
         mkdir('coverage');
 
-        $cmd = $cc . $source . ' --colors --coverage-php=coverage/result.cov';
-        $output->writeln('<info>Command: ' . $cmd . '</>');
+        $cmd = $paratest.$source.' --colors --coverage-php=coverage/result.cov';
+        $output->writeln('<info>Command: '.$cmd.'</>');
         $process = new Process($cmd);
         $process->setTimeout(3600);
         $process->run(function ($type, $buffer) use ($command) {
@@ -68,14 +67,15 @@ class CodeCoverage extends BaseCommand
         }
 
         $cov = $util->checkBinary('phpcov');
-        $cmd = $cov . ' merge --text --show-colors coverage';
-        $io->newLine();
+        $cmd = $cov.' merge --text --show-colors coverage';
+        $output->writeln('<info>Command: '.$cmd.'</>');
+        $style->newLine();
         $process = new Process($cmd);
         $process->run(function ($type, $buffer) use ($command) {
             $command->output->write($buffer);
         });
 
-        $cmd = $cov . ' merge --text coverage';
+        $cmd = $cov.' merge --text coverage';
         $process = new Process($cmd);
         $process->run();
         preg_match(
@@ -88,20 +88,29 @@ class CodeCoverage extends BaseCommand
         (new Process('rm -rf coverage'))->run();
 
         $end = microtime(true);
-        $time = round($end-$start);
+        $time = round($end - $start);
 
-        $io->newLine();
-        $io->section("Results");
-        $output->writeln('Coverage is '.$coverage.'%');
-        $fail = $input->getOption('fail-coverage-less-than');
-        if ($fail && $coverage < $fail) {
-            $output->writeln('<error>Mininum coverage is '.$fail.'% actual is '.$coverage.'%</>');
+        $style->newLine();
+        $style->section('Results');
+
+        if (empty($coverage)) {
             $exitCode = 1;
         }
-        $io->newLine();
-        $output->writeln('<info>Command: ' . $cmd . '</>');
-        $output->writeln('<info>Time: ' . $time . ' seconds</>');
-        $io->newLine();
+
+        if (!empty($coverage)) {
+            $output->writeln('Coverage is '.$coverage.'%');
+            $fail = $input->getOption('fail-coverage-less-than');
+            if ($fail && $coverage < $fail) {
+                $output->writeln('<error>Mininum coverage is '.$fail.'% actual is '.$coverage.'%</>');
+                $exitCode = 1;
+            }
+        }
+
+        $style->newLine();
+        $output->writeln('<info>Command: '.$cmd.'</>');
+        $output->writeln('<info>Time: '.$time.' seconds</>');
+        $style->newLine();
+
         return $exitCode;
     }
 }

@@ -8,7 +8,7 @@ use Symfony\Component\Console\Input\InputInterface;
 
 class Util
 {
-    protected $source = array('src','app','tests');
+    protected $source = array('src', 'app', 'tests');
 
     public function checkSource(InputInterface $input, $separator = ' ')
     {
@@ -42,7 +42,7 @@ class Util
             list(, $file) = explode(' ', trim($fileLine));
             $info = pathinfo(basename($file));
 
-            if (array_key_exists('extension', $info) && $info["extension"] == "php") {
+            if (array_key_exists('extension', $info) && $info['extension'] == 'php') {
                 $validFiles[] = $file;
             }
         }
@@ -56,20 +56,21 @@ class Util
         if (!file_exists($bin)) {
             $process = new Process($name.' --version');
             $process->run();
-            if ($process->isSuccessful()) {
-                $bin = $name;
-            } else {
+            if (!$process->isSuccessful()) {
                 throw new ProcessFailedException($process);
             }
+
+            $bin = $name;
         }
 
         return $bin;
     }
 
-    public function CheckVersion($name)
+    public function checkVersion($name)
     {
-        $process = new Process($name . ' --version');
+        $process = new Process($name.' --version');
         $process->run();
+
         return $process->getOutput();
     }
 }

@@ -8,7 +8,6 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
-use Symfony\Component\Process\Exception\ProcessFailedException;
 use Symfony\Component\Process\Process;
 
 class CopyPasteDetector extends BaseCommand
@@ -21,7 +20,7 @@ class CopyPasteDetector extends BaseCommand
             ->setDescription($this->description)
             ->addArgument(
                 'source',
-                InputArgument::IS_ARRAY|InputArgument::OPTIONAL,
+                InputArgument::IS_ARRAY | InputArgument::OPTIONAL,
                 'List of directories/files to search <comment>[Default:"src,app,tests"]</>'
             )
             ->addOption(
@@ -36,9 +35,8 @@ class CopyPasteDetector extends BaseCommand
     {
         $start = microtime(true);
         $this->output = $output;
-        $command = $this;
-        $io = new SymfonyStyle($input, $output);
-        $io->title($this->description);
+        $style = new SymfonyStyle($input, $output);
+        $style->title($this->description);
 
         $util = new Util();
         $cpd = $util->checkBinary('phpcpd');
@@ -49,23 +47,24 @@ class CopyPasteDetector extends BaseCommand
 
         if (empty($source)) {
             $output->writeln('<error>No files found</>');
-            $io->newLine();
+            $style->newLine();
+
             return 1;
         }
 
-        $cmd = $cpd . ' ' . $source . ' --ansi --fuzzy';
+        $cmd = $cpd.' '.$source.' --ansi --fuzzy';
+        $output->writeln('<info>Command: '.$cmd.'</>');
+        $style->newLine();
         $process = new Process($cmd);
-        $command = $this;
-        $process->run(function ($type, $buffer) use ($command) {
-            $command->output->writeln($buffer);
-        });
+        $process->run();
+        $output->writeln($process->getOutput());
         $end = microtime(true);
-        $time = round($end-$start);
+        $time = round($end - $start);
 
-        $io->section("Results");
-        $output->writeln('<info>Command: ' . $cmd . '</>');
-        $output->writeln('<info>Time: ' . $time . ' seconds</>');
-        $io->newLine();
+        $style->section('Results');
+        $output->writeln('<info>Time: '.$time.' seconds</>');
+        $style->newLine();
+
         return $process->getExitCode();
     }
 }

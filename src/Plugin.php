@@ -9,7 +9,13 @@ use Composer\Plugin\Capable;
 
 class Plugin implements PluginInterface, Capable
 {
-    public function activate(Composer $composer, IOInterface $io)
+    /**
+     * This will suppress UnusedFormalParameter
+     * warnings in this method.
+     *
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     */
+    public function activate(Composer $composer, IOInterface $style)
     {
     }
 

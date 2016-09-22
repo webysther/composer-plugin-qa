@@ -8,7 +8,6 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
-use Symfony\Component\Process\Exception\ProcessFailedException;
 use Symfony\Component\Process\Process;
 
 class PHPMetrics extends BaseCommand
@@ -21,7 +20,7 @@ class PHPMetrics extends BaseCommand
             ->setDescription($this->description)
             ->addArgument(
                 'source',
-                InputArgument::IS_ARRAY|InputArgument::OPTIONAL,
+                InputArgument::IS_ARRAY | InputArgument::OPTIONAL,
                 'List of directories to search <comment>[Default:"src,app,tests"]</>'
             )
             ->addOption(
@@ -37,12 +36,12 @@ class PHPMetrics extends BaseCommand
         $start = microtime(true);
         $this->output = $output;
         $command = $this;
-        $io = new SymfonyStyle($input, $output);
-        $io->title($this->description);
+        $style = new SymfonyStyle($input, $output);
+        $style->title($this->description);
 
         $util = new Util();
-        $pm = $util->checkBinary('phpmetrics');
-        $output->writeln($util->checkVersion($pm));
+        $phpmetrics = $util->checkBinary('phpmetrics');
+        $output->writeln($util->checkVersion($phpmetrics));
         $source = $util->checkSource($input);
         if ($input->getOption('diff')) {
             $source = $util->getDiffSource();
@@ -52,12 +51,12 @@ class PHPMetrics extends BaseCommand
         $options = ' --report-cli --ansi --without-oop --ignore-errors --level=4 --excluded-dirs=\'.git\' ';
         $exitCode = 0;
         foreach ($sources as $source) {
-            $cmd = $pm . $options . $source;
-            $output->writeln('<info>Command: ' . $cmd . '</>');
-            $io->newLine();
+            $cmd = $phpmetrics.$options.$source;
+            $output->writeln('<info>Command: '.$cmd.'</>');
+            $style->newLine();
             $process = new Process($cmd);
             $process->setTimeout(3600)->run(function ($type, $buffer) use ($command) {
-                if (strpos($buffer, ']') !== false) {
+                if (strpos($buffer, ']') !== false || Process::ERR == $type) {
                     return;
                 }
                 $command->output->write($buffer);
@@ -69,11 +68,12 @@ class PHPMetrics extends BaseCommand
         }
 
         $end = microtime(true);
-        $time = round($end-$start);
+        $time = round($end - $start);
 
-        $io->section("Results");
-        $output->writeln('<info>Time: ' . $time . ' seconds</>');
-        $io->newLine();
+        $style->section('Results');
+        $output->writeln('<info>Time: '.$time.' seconds</>');
+        $style->newLine();
+
         return $exitCode;
     }
 }

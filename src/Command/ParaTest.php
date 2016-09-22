@@ -8,7 +8,6 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
-use Symfony\Component\Process\Exception\ProcessFailedException;
 use Symfony\Component\Process\Process;
 
 class ParaTest extends BaseCommand
@@ -20,7 +19,7 @@ class ParaTest extends BaseCommand
         $this->setName('qa:paratest')
             ->addArgument(
                 'source',
-                InputArgument::IS_ARRAY|InputArgument::OPTIONAL,
+                InputArgument::IS_ARRAY | InputArgument::OPTIONAL,
                 'List of directories/files to search'
             )
             ->addOption(
@@ -43,8 +42,8 @@ class ParaTest extends BaseCommand
         $start = microtime(true);
         $this->output = $output;
         $command = $this;
-        $io = new SymfonyStyle($input, $output);
-        $io->title($this->description);
+        $style = new SymfonyStyle($input, $output);
+        $style->title($this->description);
 
         $util = new Util();
         $test = $util->checkBinary('paratest');
@@ -52,14 +51,14 @@ class ParaTest extends BaseCommand
 
         $source = '';
         if ($input->getArgument('source')) {
-            $source = ' ' . $util->checkSource($input);
+            $source = ' '.$util->checkSource($input);
         }
 
         if ($input->getOption('diff')) {
             $sources = explode(' ', $util->getDiffSource());
             foreach ($sources as $file) {
                 if (strpos($file, 'tests/') !== false) {
-                    $source = ' --path ' . $file;
+                    $source = ' --path '.$file;
                     break; // Use only the first occurrency
                 }
             }
@@ -70,19 +69,23 @@ class ParaTest extends BaseCommand
             $stopFail = ' --stop-on-failure';
         }
 
-        $cmd = $test . $source . ' --colors' . $stopFail;
-        $output->writeln('<info>Command: ' . $cmd . '</>');
-        $io->newLine();
+        $cmd = $test.$source.' --colors'.$stopFail;
+        $output->writeln('<info>Command: '.$cmd.'</>');
+        $style->newLine();
         $process = new Process($cmd);
         $process->setTimeout(3600)->run(function ($type, $buffer) use ($command) {
+            if (Process::ERR == $type) {
+                return;
+            }
             $command->output->write($buffer);
         });
         $end = microtime(true);
-        $time = round($end-$start);
+        $time = round($end - $start);
 
-        $io->section("Results");
-        $output->writeln('<info>Time: ' . $time . ' seconds</>');
-        $io->newLine();
+        $style->section('Results');
+        $output->writeln('<info>Time: '.$time.' seconds</>');
+        $style->newLine();
+
         return $process->getExitCode();
     }
 }
