@@ -21,8 +21,18 @@ use Symfony\Component\Console\Style\SymfonyStyle;
  */
 class All extends BaseCommand
 {
+    /**
+     * Console description
+     *
+     * @var string
+     */
     protected $description = 'Run all tools';
 
+    /**
+     * Console params configuration
+     *
+     * @return void
+     */
     protected function configure()
     {
         $this->setName('qa:all')
@@ -35,6 +45,13 @@ class All extends BaseCommand
             ->setDescription($this->description);
     }
 
+    /**
+     * Execution
+     *
+     * @param  InputInterface  $input  Input console
+     * @param  OutputInterface $output Output console
+     * @return integer                 Exit code
+     */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $start = microtime(true);

@@ -20,8 +20,18 @@ use Symfony\Component\Console\Style\SymfonyStyle;
  */
 class Fixer extends BaseCommand
 {
+    /**
+     * Console description
+     *
+     * @var string
+     */
     protected $description = 'Run qa:code-beautifier-fixer and qa:php-cs-fixer';
 
+    /**
+     * Console params configuration
+     *
+     * @return void
+     */
     protected function configure()
     {
         $this->setName('qa:fixer')
@@ -40,6 +50,13 @@ class Fixer extends BaseCommand
             );
     }
 
+    /**
+     * Execution
+     *
+     * @param  InputInterface  $input  Input console
+     * @param  OutputInterface $output Output console
+     * @return integer                 Exit code
+     */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $start = microtime(true);
