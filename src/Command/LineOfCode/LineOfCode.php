@@ -5,6 +5,7 @@
  *
  * @author Webysther Nunes <webysther@gmail.com>
  */
+
 namespace Webs\QA\Command\LineOfCode;
 
 use Composer\Command\BaseCommand;

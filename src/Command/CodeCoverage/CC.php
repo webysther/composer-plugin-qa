@@ -5,6 +5,7 @@
  *
  * @author Webysther Nunes <webysther@gmail.com>
  */
+
 namespace Webs\QA\Command\CodeCoverage;
 
 /**

@@ -5,6 +5,7 @@
  *
  * @author Webysther Nunes <webysther@gmail.com>
  */
+
 namespace Webs\QA\Command\Test;
 
 use Composer\Command\BaseCommand;
