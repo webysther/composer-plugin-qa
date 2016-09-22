@@ -22,13 +22,15 @@ class Provider implements CommandProviderCapability
             new CodeBeautifierFixer,
             new CBF,
             new Test,
+            new ParaTest,
             new PHPCSFixer,
             new CSF,
             new PHPMetrics,
             new PM,
             new SecurityChecker,
-            new SC,
-            new All
+            new SEC,
+            new All,
+            new Fixer
         );
     }
 }

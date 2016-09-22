@@ -5,15 +5,14 @@ namespace Webs\QA\Command;
 use Composer\Command\BaseCommand;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\Process\Exception\ProcessFailedException;
 use Symfony\Component\Process\Process;
 
 class CopyPasteDetector extends BaseCommand
 {
-    protected $input;
-    protected $output;
-    protected $source = array('src','app','tests');
     protected $description = 'Copy/Paste Detector';
 
     protected function configure()
@@ -23,54 +22,50 @@ class CopyPasteDetector extends BaseCommand
             ->addArgument(
                 'source',
                 InputArgument::IS_ARRAY|InputArgument::OPTIONAL,
-                'List of directories to search  Default:src,app,tests'
+                'List of directories/files to search <comment>[Default:"src,app,tests"]</>'
+            )
+            ->addOption(
+                'diff',
+                null,
+                InputOption::VALUE_NONE,
+                'Use `git status -s` to search files to check'
             );
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $start = microtime(true);
-        $this->input = $input;
         $this->output = $output;
-        $this->output->writeln('<comment>Running ' . $this->description . '...</comment>');
+        $command = $this;
+        $io = new SymfonyStyle($input, $output);
+        $io->title($this->description);
 
-        $cpd = 'vendor/bin/phpcpd';
-        if(!file_exists($cpd)){
-            $process = new Process('phpcpd --help');
-            $process->run();
-            if ($process->isSuccessful()) {
-                $cpd = 'phpcpd';
-            } else {
-                throw new ProcessFailedException($process);
-            }
+        $util = new Util();
+        $cpd = $util->checkBinary('phpcpd');
+        $source = $util->checkSource($input);
+        if ($input->getOption('diff')) {
+            $source = $util->getDiffSource();
         }
 
-        $cmd = $cpd . ' ' . $this->getSource() . ' --ansi --fuzzy';
+        if (empty($source)) {
+            $output->writeln('<error>No files found</>');
+            $io->newLine();
+            return 1;
+        }
+
+        $cmd = $cpd . ' ' . $source . ' --ansi --fuzzy';
         $process = new Process($cmd);
         $command = $this;
-        $process->run(function($type, $buffer) use($command){
+        $process->run(function ($type, $buffer) use ($command) {
             $command->output->writeln($buffer);
         });
         $end = microtime(true);
         $time = round($end-$start);
 
-        $this->output->writeln('<comment>Command executed `' . $cmd . '` in ' . $time . ' seconds</comment>');
-        exit($process->getExitCode());
-    }
-
-    protected function getSource()
-    {
-        if($this->input->getArgument('source')){
-            $this->source = $this->input->getArgument('source');
-        }
-
-        $dirs = array();
-        foreach ($this->source as $dir) {
-            if(is_dir($dir)){
-                $dirs[] = $dir;
-            }
-        }
-
-        return implode(' ', $dirs);
+        $io->section("Results");
+        $output->writeln('<info>Command: ' . $cmd . '</>');
+        $output->writeln('<info>Time: ' . $time . ' seconds</>');
+        $io->newLine();
+        return $process->getExitCode();
     }
 }

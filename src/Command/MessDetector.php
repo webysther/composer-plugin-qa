@@ -2,19 +2,17 @@
 
 namespace Webs\QA\Command;
 
-use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Output\OutputInterface;
 use Composer\Command\BaseCommand;
-use Symfony\Component\Process\Process;
-use Symfony\Component\Process\Exception\ProcessFailedException;
 use Symfony\Component\Console\Input\InputArgument;
+use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
+use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\Style\SymfonyStyle;
+use Symfony\Component\Process\Exception\ProcessFailedException;
+use Symfony\Component\Process\Process;
 
 class MessDetector extends BaseCommand
 {
-    protected $input;
-    protected $output;
-    protected $source = array('src','app','tests');
     protected $description = 'Mess Detector';
 
     protected function configure()
@@ -24,43 +22,43 @@ class MessDetector extends BaseCommand
             ->addArgument(
                 'source',
                 InputArgument::IS_ARRAY|InputArgument::OPTIONAL,
-                'List of directories to search  Default:src,app,tests'
+                'List of directories/files to search <comment>[Default:"src,app,tests"]</>'
+            )
+            ->addOption(
+                'diff',
+                null,
+                InputOption::VALUE_NONE,
+                'Use `git status -s` to search files to check'
             );
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $start = microtime(true);
-        $this->input = $input;
-        $this->output = $output;
-        $this->output->writeln('<comment>Running ' . $this->description . '...</comment>');
+        $io = new SymfonyStyle($input, $output);
+        $io->title($this->description);
 
-        $md = 'vendor/bin/phpmd';
-        if(!file_exists($md)){
-            $process = new Process('phpmd --version'); // --help return exit 1
-            $process->run();
-            if ($process->isSuccessful()) {
-                $md = 'phpmd';
-            } else {
-                throw new ProcessFailedException($process);
-            }
+        $util = new Util();
+        $md = $util->checkBinary('phpmd');
+        $output->writeln($util->checkVersion($md));
+        $source = $util->checkSource($input, ',');
+        if ($input->getOption('diff')) {
+            $source = $util->getDiffSource(',');
         }
 
-        $process = new Process($md . ' --version');
-        $process->run();
-        $this->output->writeln($process->getOutput());
-
-        $cmd = $md . ' ' . $this->getSource() . ' text phpmd.xml';
-
+        $cmd = $md . ' ' . $source . ' text phpmd.xml';
+        $output->writeln('<info>Command: ' . $cmd . '</>');
+        $io->newLine();
         $process = new Process($cmd);
-        $process->setTimeout(3600);
-        $process->run();
+        $exitCode = $process->setTimeout(3600)->run();
+        $output->writeln($this->format($process->getOutput()));
         $end = microtime(true);
         $time = round($end-$start);
 
-        $this->output->writeln($this->format($process->getOutput()));
-        $this->output->writeln('<comment>Command executed `' . $cmd . '` in ' . $time . ' seconds</comment>');
-        exit($process->getExitCode());
+        $io->section("Results");
+        $output->writeln('<info>Time: ' . $time . ' seconds</>');
+        $io->newLine();
+        return $exitCode;
     }
 
     /**
@@ -72,21 +70,5 @@ class MessDetector extends BaseCommand
         $output = str_replace(realpath(__DIR__."/..")."/", '', $output);
         $output = str_replace("\t", " \033[1;31m " . PHP_EOL, $output);
         return str_replace(". ", ".".PHP_EOL, $output);
-    }
-
-    protected function getSource()
-    {
-        if($this->input->getArgument('source')){
-            $this->source = $this->input->getArgument('source');
-        }
-
-        $dirs = array();
-        foreach ($this->source as $dir) {
-            if(is_dir($dir)){
-                $dirs[] = $dir;
-            }
-        }
-
-        return implode(',', $dirs);
     }
 }

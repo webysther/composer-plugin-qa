@@ -7,57 +7,50 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\Process\Exception\ProcessFailedException;
 use Symfony\Component\Process\Process;
+use Symfony\Component\Console\Style\SymfonyStyle;
 
-class LineOfCode extends BaseCommand
+class Fixer extends BaseCommand
 {
-    protected $description = 'Line of Code';
+    protected $description = 'Run qa:code-beautifier-fixer and qa:php-cs-fixer';
 
     protected function configure()
     {
-        $this->setName('qa:line-of-code')
+        $this->setName('qa:fixer')
             ->setDescription($this->description)
             ->addArgument(
                 'source',
                 InputArgument::IS_ARRAY|InputArgument::OPTIONAL,
-                'List of directories/files to search <comment>[Default:"src,app,tests"]</>'
+                'List of directories to search  Default:src,app,tests'
             )
             ->addOption(
-                'diff',
+                'standard',
                 null,
-                InputOption::VALUE_NONE,
-                'Use `git status -s` to search files to check'
+                InputOption::VALUE_REQUIRED,
+                'List of standards',
+                'PSR1,PSR2'
             );
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $start = microtime(true);
-        $this->output = $output;
-        $command = $this;
+        $commands = array('qa:cbf', 'qa:csf');
         $io = new SymfonyStyle($input, $output);
-        $io->title($this->description);
+        $output->write(sprintf("\033\143"));
 
-        $util = new Util();
-        $loc = $util->checkBinary('phploc');
-        $source = $util->checkSource($input);
-        if ($input->getOption('diff')) {
-            $source = $util->getDiffSource();
+        foreach ($commands as $command) {
+            $returnCode = $this->getApplication()->find($command)->run($input, $output);
+            if ($returnCode) {
+                $output->writeln('<error>Exit code ' . $returnCode . '</>');
+            }
         }
 
-        $cmd = $loc . ' ' . $source . ' --ansi --count-tests';
-        $process = new Process($cmd);
-        $process->run();
-        $output->writeln($process->getOutput());
         $end = microtime(true);
         $time = round($end-$start);
-
-        $io->section("Results");
-        $output->writeln('<info>Command: ' . $cmd . '</>');
-        $output->writeln('<info>Time: ' . $time . ' seconds</>');
         $io->newLine();
-        return $process->getExitCode();
+        $io->section("Results");
+        $output->writeln('<info>Time: ' . $time . ' seconds</>');
     }
 }

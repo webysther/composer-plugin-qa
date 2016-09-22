@@ -9,12 +9,10 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Process\Exception\ProcessFailedException;
 use Symfony\Component\Process\Process;
+use Symfony\Component\Console\Style\SymfonyStyle;
 
 class PHPCSFixer extends BaseCommand
 {
-    protected $input;
-    protected $output;
-    protected $source = array('src','app','tests');
     protected $description = 'PHP Code Sniffer Fixer';
 
     protected function configure()
@@ -24,14 +22,20 @@ class PHPCSFixer extends BaseCommand
             ->addArgument(
                 'source',
                 InputArgument::IS_ARRAY|InputArgument::OPTIONAL,
-                'List of directories to search  Default:src,app,tests'
+                'List of directories to search <comment>[Default:"src,app,tests"]</>'
             )
             ->addOption(
                 'standard',
                 null,
                 InputOption::VALUE_REQUIRED,
-                'List of standards  Default:PSR0,PSR1,PSR2,Symfony',
+                'List of standards',
                 'PSR0,PSR1,PSR2,Symfony'
+            )
+            ->addOption(
+                'diff',
+                null,
+                InputOption::VALUE_NONE,
+                'Use `git status -s` to search files to check'
             )
             ->addOption(
                 'fix',
@@ -44,67 +48,45 @@ class PHPCSFixer extends BaseCommand
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $start = microtime(true);
-        $this->input = $input;
-        $this->output = $output;
-        $this->output->writeln('<comment>Running ' . $this->description . '...</comment>');
+        $io = new SymfonyStyle($input, $output);
+        $io->title($this->description);
 
-        $csf = 'vendor/bin/php-cs-fixer';
-        if(!file_exists($csf)){
-            $process = new Process('php-cs-fixer --help');
-            $process->run();
-            if ($process->isSuccessful()) {
-                $csf = 'php-cs-fixer';
-            } else {
-                throw new ProcessFailedException($process);
-            }
+        $util = new Util();
+        $csf = $util->checkBinary('php-cs-fixer');
+        $output->writeln($util->checkVersion($csf));
+        $source = $util->checkSource($input);
+        if ($input->getOption('diff')) {
+            $source = $util->getDiffSource();
         }
 
-        $process = new Process($csf . ' --version');
-        $process->run();
-        $this->output->writeln($process->getOutput());
-
         $option = ' --dry-run --diff';
-        if($input->getOption('fix')){
+        if ($input->getOption('fix')) {
             $option = '';
         }
 
-        $standards = '--level=' . str_replace(',', ' --level=', strtolower($input->getOption('standard')));
-        $sources = $this->getSource();
+        $standard = strtolower($input->getOption('standard'));
+        $standards = '--level=' . str_replace(',', ' --level=', $standard);
+        $sources = explode(' ', $source);
         $exitCode = 0;
         foreach ($sources as $source) {
             $cmd = $csf . ' fix ' . $source . ' --ansi '. $standards . $option;
-            $this->output->writeln('<comment>Command executing `' . $cmd . '`</comment>');
+            $output->writeln('<info>Command: ' . $cmd . '</>');
+            $io->newLine();
             $process = new Process($cmd);
-            $process->setTimeout(3600);
-            $command = $this;
-            $process->run(function($type, $buffer) use($command){
-                $command->output->writeln($buffer);
-            });
+            $process->setTimeout(3600)->run();
+            $output->writeln($process->getOutput());
 
-            if(!$exitCode){
+            if (!$exitCode) {
                 $exitCode = $process->getExitCode();
             }
         }
 
         $end = microtime(true);
         $time = round($end-$start);
-        $this->output->writeln('<comment>All executed in ' . $time . ' seconds</comment>');
-        exit($exitCode);
-    }
 
-    protected function getSource()
-    {
-        if($this->input->getArgument('source')){
-            $this->source = $this->input->getArgument('source');
-        }
-
-        $dirs = array();
-        foreach ($this->source as $dir) {
-            if(is_dir($dir)){
-                $dirs[] = $dir;
-            }
-        }
-
-        return $dirs;
+        $io->section("Results");
+        $output->writeln('<info>Time: ' . $time . ' seconds</>');
+        $io->newLine();
+        return $exitCode;
     }
 }

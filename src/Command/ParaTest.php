@@ -7,17 +7,17 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\Process\Exception\ProcessFailedException;
 use Symfony\Component\Process\Process;
-use Symfony\Component\Console\Style\SymfonyStyle;
 
-class Test extends BaseCommand
+class ParaTest extends BaseCommand
 {
-    protected $description = 'PHPUnit';
+    protected $description = 'PHPUnit using ParaTest';
 
     protected function configure()
     {
-        $this->setName('qa:test')
+        $this->setName('qa:paratest')
             ->addArgument(
                 'source',
                 InputArgument::IS_ARRAY|InputArgument::OPTIONAL,
@@ -47,7 +47,8 @@ class Test extends BaseCommand
         $io->title($this->description);
 
         $util = new Util();
-        $test = $util->checkBinary('phpunit');
+        $test = $util->checkBinary('paratest');
+        $output->writeln($util->checkVersion($test));
 
         $source = '';
         if ($input->getArgument('source')) {
@@ -58,7 +59,7 @@ class Test extends BaseCommand
             $sources = explode(' ', $util->getDiffSource());
             foreach ($sources as $file) {
                 if (strpos($file, 'tests/') !== false) {
-                    $source = ' ' . $file;
+                    $source = ' --path ' . $file;
                     break; // Use only the first occurrency
                 }
             }
@@ -69,7 +70,7 @@ class Test extends BaseCommand
             $stopFail = ' --stop-on-failure';
         }
 
-        $cmd = $test . $source . ' --report-useless-tests --colors=always' . $stopFail;
+        $cmd = $test . $source . ' --colors' . $stopFail;
         $output->writeln('<info>Command: ' . $cmd . '</>');
         $io->newLine();
         $process = new Process($cmd);

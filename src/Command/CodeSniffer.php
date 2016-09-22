@@ -2,19 +2,17 @@
 
 namespace Webs\QA\Command;
 
-use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Output\OutputInterface;
 use Composer\Command\BaseCommand;
-use Symfony\Component\Process\Process;
-use Symfony\Component\Process\Exception\ProcessFailedException;
 use Symfony\Component\Console\Input\InputArgument;
+use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
+use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\Style\SymfonyStyle;
+use Symfony\Component\Process\Exception\ProcessFailedException;
+use Symfony\Component\Process\Process;
 
 class CodeSniffer extends BaseCommand
 {
-    protected $input;
-    protected $output;
-    protected $source = array('src','app','tests');
     protected $description = 'Code Sniffer';
 
     protected function configure()
@@ -24,7 +22,7 @@ class CodeSniffer extends BaseCommand
             ->addArgument(
                 'source',
                 InputArgument::IS_ARRAY|InputArgument::OPTIONAL,
-                'List of directories to search  Default:src,app,tests'
+                'List of directories/files to search  <comment>[Default:"src,app,tests"]</>'
             )
             ->addOption(
                 'standard',
@@ -32,57 +30,51 @@ class CodeSniffer extends BaseCommand
                 InputOption::VALUE_REQUIRED,
                 'List of standards  Default:PSR1,PSR2',
                 'PSR1,PSR2'
+            )
+            ->addOption(
+                'diff',
+                null,
+                InputOption::VALUE_NONE,
+                'Use `git status -s` to search files to check'
             );
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $start = microtime(true);
-        $this->input = $input;
         $this->output = $output;
-        $this->output->writeln('<comment>Running ' . $this->description . '...</comment>');
+        $io = new SymfonyStyle($input, $output);
+        $io->title($this->description);
 
-        $cs = 'vendor/bin/phpcs';
-        if(!file_exists($cs)){
-            $process = new Process('phpcs --help');
-            $process->run();
-            if ($process->isSuccessful()) {
-                $cs = 'phpcs';
-            } else {
-                throw new ProcessFailedException($process);
-            }
+        $util = new Util();
+        $cs = $util->checkBinary('phpcs');
+        $output->writeln($util->checkVersion($cs));
+        $standard = $input->getOption('standard');
+        $source = $util->checkSource($input);
+
+        if ($input->getOption('diff')) {
+            $source = $util->getDiffSource();
         }
 
-        $process = new Process($cs . ' --version');
-        $process->run();
-        $this->output->writeln($process->getOutput());
+        if (empty($source)) {
+            $output->writeln('<error>No files found</>');
+            $io->newLine();
+            return 1;
+        }
 
-        $cmd = $cs . ' ' . $this->getSource() . ' --colors --standard='.$input->getOption('standard');
+        $cmd = $cs . ' ' . $source . ' --colors --standard='.$standard;
         $process = new Process($cmd);
         $command = $this;
-        $process->run(function($type, $buffer) use($command){
+        $process->run(function ($type, $buffer) use ($command) {
             $command->output->writeln($buffer);
         });
         $end = microtime(true);
         $time = round($end-$start);
 
-        $this->output->writeln('<comment>Command executed `' . $cmd . '` in ' . $time . ' seconds</comment>');
-        exit($process->getExitCode());
-    }
-
-    protected function getSource()
-    {
-        if($this->input->getArgument('source')){
-            $this->source = $this->input->getArgument('source');
-        }
-
-        $dirs = array();
-        foreach ($this->source as $dir) {
-            if(is_dir($dir)){
-                $dirs[] = $dir;
-            }
-        }
-
-        return implode(' ', $dirs);
+        $io->section("Results");
+        $output->writeln('<info>Command: ' . $cmd . '</>');
+        $output->writeln('<info>Time: ' . $time . ' seconds</>');
+        $io->newLine();
+        return $process->getExitCode();
     }
 }

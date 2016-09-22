@@ -6,6 +6,7 @@ use Composer\Command\BaseCommand;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\Process\Exception\ProcessFailedException;
 use Symfony\Component\Process\Process;
 
@@ -15,34 +16,31 @@ class SecurityChecker extends BaseCommand
 
     protected function configure()
     {
-        $this->setName('qa:security-checker')
-            ->setDescription($this->description);
+        $this->setName('qa:security-checker')->setDescription($this->description);
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $start = microtime(true);
-        $output->writeln('<comment>Running ' . $this->description . '...</comment>');
+        $io = new SymfonyStyle($input, $output);
+        $io->title($this->description);
 
-        $sc = 'vendor/bin/security-checker';
-        if(!file_exists($sc)){
-            $process = new Process('security-checker --help');
-            $process->run();
-            if ($process->isSuccessful()) {
-                $sc = 'security-checker';
-            } else {
-                throw new ProcessFailedException($process);
-            }
-        }
+        $util = new Util();
+        $sec = $util->checkBinary('security-checker');
+        $output->writeln($util->checkVersion($sec));
 
-        $cmd = $sc . ' --ansi security:check';
+        $cmd = $sec . ' --ansi security:check';
+        $output->writeln('<info>Command: ' . $cmd . '</>');
+        $io->newLine();
         $process = new Process($cmd);
         $process->run();
         $output->writeln($process->getOutput());
         $end = microtime(true);
         $time = round($end-$start);
 
-        $output->writeln('<comment>Command executed `' . $cmd . '` in ' . $time . ' seconds</comment>');
-        exit($process->getExitCode());
+        $io->section("Results");
+        $output->writeln('<info>Time: ' . $time . ' seconds</>');
+        $io->newLine();
+        return $process->getExitCode();
     }
 }

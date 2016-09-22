@@ -2,12 +2,12 @@
 
 namespace Webs\QA\Command;
 
-class SC extends SecurityChecker
+class SEC extends SecurityChecker
 {
 
     protected function configure()
     {
         parent::configure();
-        $this->setName('qa:sc');
+        $this->setName('qa:sec');
     }
 }

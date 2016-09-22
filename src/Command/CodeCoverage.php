@@ -7,19 +7,23 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\Process\Exception\ProcessFailedException;
 use Symfony\Component\Process\Process;
 
 class CodeCoverage extends BaseCommand
 {
-    protected $input;
-    protected $output;
     protected $description = 'Code Coverage';
 
     protected function configure()
     {
         // Alias is composer qa:cc
         $this->setName('qa:code-coverage')
+            ->addArgument(
+                'source',
+                InputArgument::IS_ARRAY|InputArgument::OPTIONAL,
+                'List of directories/files to search'
+            )
             ->addOption(
                 'fail-coverage-less-than',
                 null,
@@ -33,56 +37,41 @@ class CodeCoverage extends BaseCommand
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $start = microtime(true);
-        $this->input = $input;
         $this->output = $output;
-        $this->output->writeln('<comment>Running ' . $this->description . '...</comment>');
+        $command = $this;
+        $io = new SymfonyStyle($input, $output);
+        $io->title($this->description);
 
-        $cc = 'vendor/bin/paratest';
-        if(!file_exists($cc)){
-            $process = new Process('paratest --help');
-            $process->run();
-            if ($process->isSuccessful()) {
-                $cc = 'paratest';
-            } else {
-                throw new ProcessFailedException($process);
-            }
+        $util = new Util();
+        $cc = $util->checkBinary('paratest');
+        $output->writeln($util->checkVersion($cc));
+
+        $source = '';
+        if ($input->getArgument('source')) {
+            $source = ' ' . $util->checkSource($input);
         }
 
-        $process = new Process($cc . ' --version');
-        $process->run();
-        $this->output->writeln($process->getOutput());
-
         (new Process('rm -rf coverage'))->run();
-
         mkdir('coverage');
-        $cmd = $cc . ' --colors --coverage-php=coverage/result.cov';
-        $this->output->writeln('<comment>Command executing ' . $cmd . '</comment>');
+
+        $cmd = $cc . $source . ' --colors --coverage-php=coverage/result.cov';
+        $output->writeln('<info>Command: ' . $cmd . '</>');
         $process = new Process($cmd);
         $process->setTimeout(3600);
-        $command = $this;
-        $process->run(function($type, $buffer) use($command){
+        $process->run(function ($type, $buffer) use ($command) {
             $command->output->write($buffer);
         });
         $exitCode = $process->getExitCode();
 
-        if($exitCode){
-            exit($exitCode);
+        if ($exitCode) {
+            return $exitCode;
         }
 
-        $cov = 'vendor/bin/phpcov';
-        if(!file_exists($cov)){
-            $process = new Process('phpcov --help');
-            $process->run();
-            if ($process->isSuccessful()) {
-                $cov = 'phpcov';
-            } else {
-                throw new ProcessFailedException($process);
-            }
-        }
-
+        $cov = $util->checkBinary('phpcov');
         $cmd = $cov . ' merge --text --show-colors coverage';
+        $io->newLine();
         $process = new Process($cmd);
-        $process->run(function($type, $buffer) use($command){
+        $process->run(function ($type, $buffer) use ($command) {
             $command->output->write($buffer);
         });
 
@@ -96,20 +85,23 @@ class CodeCoverage extends BaseCommand
         );
         $coverage = end($matches);
 
-        $fail = $input->getOption('fail-coverage-less-than');
-        if($fail && $coverage < $fail){
-            $this->output->writeln('Mininum coverage is '.$fail.'% actual is '.$coverage.'%');
-            $exitCode = 1;
-        }
-
         (new Process('rm -rf coverage'))->run();
 
         $end = microtime(true);
         $time = round($end-$start);
 
-        $this->output->writeln('Coverage is '.$coverage.'%');
-        $this->output->writeln('<comment>Command executed ' . $cmd . '</comment>');
-        $this->output->writeln('<comment>All take ' . $time . ' seconds</comment>');
-        exit($exitCode);
+        $io->newLine();
+        $io->section("Results");
+        $output->writeln('Coverage is '.$coverage.'%');
+        $fail = $input->getOption('fail-coverage-less-than');
+        if ($fail && $coverage < $fail) {
+            $output->writeln('<error>Mininum coverage is '.$fail.'% actual is '.$coverage.'%</>');
+            $exitCode = 1;
+        }
+        $io->newLine();
+        $output->writeln('<info>Command: ' . $cmd . '</>');
+        $output->writeln('<info>Time: ' . $time . ' seconds</>');
+        $io->newLine();
+        return $exitCode;
     }
 }
