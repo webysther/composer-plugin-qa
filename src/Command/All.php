@@ -1,11 +1,10 @@
 <?php
 
 /**
- * Composer Plugin QA
+ * Composer Plugin QA.
  *
  * @author Webysther Nunes <webysther@gmail.com>
  */
-
 namespace Webs\QA\Command;
 
 use Composer\Command\BaseCommand;
@@ -17,21 +16,19 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
 /**
- * Run all tests, ignore short version
+ * Run all tests, ignore short version.
  */
 class All extends BaseCommand
 {
     /**
-     * Console description
+     * Console description.
      *
      * @var string
      */
     protected $description = 'Run all tools';
 
     /**
-     * Console params configuration
-     *
-     * @return void
+     * Console params configuration.
      */
     protected function configure()
     {
@@ -46,11 +43,12 @@ class All extends BaseCommand
     }
 
     /**
-     * Execution
+     * Execution.
      *
-     * @param  InputInterface  $input  Input console
-     * @param  OutputInterface $output Output console
-     * @return integer                 Exit code
+     * @param InputInterface  $input  Input console
+     * @param OutputInterface $output Output console
+     *
+     * @return int Exit code
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
@@ -60,7 +58,7 @@ class All extends BaseCommand
         $style = new SymfonyStyle($input, $output);
         $output->write(sprintf("\033\143"));
         $style->title('Running all');
-        $ignore = array('qa:all', 'qa:fixer');
+        $ignore = array('qa:all', 'qa:fixer', 'qa:paratest');
 
         foreach ($commands as $command) {
             $name = $command->getName();

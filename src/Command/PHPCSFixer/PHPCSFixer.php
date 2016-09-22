@@ -1,11 +1,10 @@
 <?php
 
 /**
- * Composer Plugin QA
+ * Composer Plugin QA.
  *
  * @author Webysther Nunes <webysther@gmail.com>
  */
-
 namespace Webs\QA\Command\PHPCSFixer;
 
 use Composer\Command\BaseCommand;
@@ -18,21 +17,19 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 use Webs\QA\Command\Util;
 
 /**
- * A tool to automatically fix coding standards issues
+ * A tool to automatically fix coding standards issues.
  */
 class PHPCSFixer extends BaseCommand
 {
     /**
-     * Console description
+     * Console description.
      *
      * @var string
      */
     protected $description = 'PHP Code Sniffer Fixer';
 
     /**
-     * Console params configuration
-     *
-     * @return void
+     * Console params configuration.
      */
     protected function configure()
     {
@@ -65,11 +62,12 @@ class PHPCSFixer extends BaseCommand
     }
 
     /**
-     * Execution
+     * Execution.
      *
-     * @param  InputInterface  $input  Input console
-     * @param  OutputInterface $output Output console
-     * @return integer                 Exit code
+     * @param InputInterface  $input  Input console
+     * @param OutputInterface $output Output console
+     *
+     * @return int Exit code
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {

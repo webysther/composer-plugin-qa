@@ -1,11 +1,10 @@
 <?php
 
 /**
- * Composer Plugin QA
+ * Composer Plugin QA.
  *
  * @author Webysther Nunes <webysther@gmail.com>
  */
-
 namespace Webs\QA\Command\CodeSniffer;
 
 use Composer\Command\BaseCommand;
@@ -18,21 +17,19 @@ use Symfony\Component\Process\Process;
 use Webs\QA\Command\Util;
 
 /**
- * Detects violations of a defined set of coding standards
+ * Detects violations of a defined set of coding standards.
  */
 class CodeSniffer extends BaseCommand
 {
     /**
-     * Console description
+     * Console description.
      *
      * @var string
      */
     protected $description = 'Code Sniffer';
 
     /**
-     * Console params configuration
-     *
-     * @return void
+     * Console params configuration.
      */
     protected function configure()
     {
@@ -59,11 +56,12 @@ class CodeSniffer extends BaseCommand
     }
 
     /**
-     * Execution
+     * Execution.
      *
-     * @param  InputInterface  $input  Input console
-     * @param  OutputInterface $output Output console
-     * @return integer                 Exit code
+     * @param InputInterface  $input  Input console
+     * @param OutputInterface $output Output console
+     *
+     * @return int Exit code
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {

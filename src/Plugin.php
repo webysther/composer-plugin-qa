@@ -1,11 +1,10 @@
 <?php
 
 /**
- * Composer Plugin QA
+ * Composer Plugin QA.
  *
  * @author Webysther Nunes <webysther@gmail.com>
  */
-
 namespace Webs\QA;
 
 use Composer\Composer;
@@ -14,7 +13,7 @@ use Composer\Plugin\Capable;
 use Composer\Plugin\PluginInterface;
 
 /**
- * Entry point to register the plugin inside composer
+ * Entry point to register the plugin inside composer.
  */
 class Plugin implements PluginInterface, Capable
 {
@@ -31,7 +30,7 @@ class Plugin implements PluginInterface, Capable
     public function getCapabilities()
     {
         return array(
-            'Composer\Plugin\Capability\CommandProvider' => 'Webs\QA\Command\Provider'
+            'Composer\Plugin\Capability\CommandProvider' => 'Webs\QA\Command\Provider',
         );
     }
 }

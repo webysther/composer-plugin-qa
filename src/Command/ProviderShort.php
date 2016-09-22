@@ -1,11 +1,10 @@
 <?php
 
 /**
- * Composer Plugin QA
+ * Composer Plugin QA.
  *
  * @author Webysther Nunes <webysther@gmail.com>
  */
-
 namespace Webs\QA\Command;
 
 use Composer\Plugin\Capability\CommandProvider as CommandProviderCapability;
@@ -20,12 +19,12 @@ use Webs\QA\Command\PHPMetrics\PM as PM;
 use Webs\QA\Command\SecurityChecker\SEC as SEC;
 
 /**
- * Provider of commands with short alias
+ * Provider of commands with short alias.
  */
 class ProviderShort implements CommandProviderCapability
 {
     /**
-     * Return list of commands
+     * Return list of commands.
      *
      * @return array List
      */
@@ -41,7 +40,7 @@ class ProviderShort implements CommandProviderCapability
             new LOC(),
             new MD(),
             new PM(),
-            new SEC()
+            new SEC(),
         );
     }
 }

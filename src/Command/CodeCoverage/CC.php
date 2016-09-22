@@ -1,22 +1,19 @@
 <?php
 
 /**
- * Composer Plugin QA
+ * Composer Plugin QA.
  *
  * @author Webysther Nunes <webysther@gmail.com>
  */
-
 namespace Webs\QA\Command\CodeCoverage;
 
 /**
- * Alias for qa:code-coverage
+ * Alias for qa:code-coverage.
  */
 class CC extends CodeCoverage
 {
     /**
-     * Console params configuration
-     *
-     * @return void
+     * Console params configuration.
      */
     protected function configure()
     {

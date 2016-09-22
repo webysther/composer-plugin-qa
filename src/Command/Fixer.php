@@ -1,11 +1,10 @@
 <?php
 
 /**
- * Composer Plugin QA
+ * Composer Plugin QA.
  *
  * @author Webysther Nunes <webysther@gmail.com>
  */
-
 namespace Webs\QA\Command;
 
 use Composer\Command\BaseCommand;
@@ -16,21 +15,19 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
 /**
- * Group command to run 'Code Beautifier and Fixer' and 'PHP Code Sniffer Fixer'
+ * Group command to run 'Code Beautifier and Fixer' and 'PHP Code Sniffer Fixer'.
  */
 class Fixer extends BaseCommand
 {
     /**
-     * Console description
+     * Console description.
      *
      * @var string
      */
     protected $description = 'Run qa:code-beautifier-fixer and qa:php-cs-fixer';
 
     /**
-     * Console params configuration
-     *
-     * @return void
+     * Console params configuration.
      */
     protected function configure()
     {
@@ -51,11 +48,12 @@ class Fixer extends BaseCommand
     }
 
     /**
-     * Execution
+     * Execution.
      *
-     * @param  InputInterface  $input  Input console
-     * @param  OutputInterface $output Output console
-     * @return integer                 Exit code
+     * @param InputInterface  $input  Input console
+     * @param OutputInterface $output Output console
+     *
+     * @return int Exit code
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {

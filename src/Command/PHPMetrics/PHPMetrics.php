@@ -1,11 +1,10 @@
 <?php
 
 /**
- * Composer Plugin QA
+ * Composer Plugin QA.
  *
  * @author Webysther Nunes <webysther@gmail.com>
  */
-
 namespace Webs\QA\Command\PHPMetrics;
 
 use Composer\Command\BaseCommand;
@@ -18,21 +17,19 @@ use Symfony\Component\Process\Process;
 use Webs\QA\Command\Util;
 
 /**
- * Static analysis tool, gives metrics about PHP project and classes
+ * Static analysis tool, gives metrics about PHP project and classes.
  */
 class PHPMetrics extends BaseCommand
 {
     /**
-     * Console description
+     * Console description.
      *
      * @var string
      */
     protected $description = 'PHP Metrics';
 
     /**
-     * Console params configuration
-     *
-     * @return void
+     * Console params configuration.
      */
     protected function configure()
     {
@@ -52,11 +49,12 @@ class PHPMetrics extends BaseCommand
     }
 
     /**
-     * Execution
+     * Execution.
      *
-     * @param  InputInterface  $input  Input console
-     * @param  OutputInterface $output Output console
-     * @return integer                 Exit code
+     * @param InputInterface  $input  Input console
+     * @param OutputInterface $output Output console
+     *
+     * @return int Exit code
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {

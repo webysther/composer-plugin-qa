@@ -1,22 +1,19 @@
 <?php
 
 /**
- * Composer Plugin QA
+ * Composer Plugin QA.
  *
  * @author Webysther Nunes <webysther@gmail.com>
  */
-
 namespace Webs\QA\Command\MessDetector;
 
 /**
- * Alias for qa:mess-detector
+ * Alias for qa:mess-detector.
  */
 class MD extends MessDetector
 {
     /**
-     * Console params configuration
-     *
-     * @return void
+     * Console params configuration.
      */
     protected function configure()
     {

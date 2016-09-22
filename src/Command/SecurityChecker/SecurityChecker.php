@@ -1,11 +1,10 @@
 <?php
 
 /**
- * Composer Plugin QA
+ * Composer Plugin QA.
  *
  * @author Webysther Nunes <webysther@gmail.com>
  */
-
 namespace Webs\QA\Command\SecurityChecker;
 
 use Composer\Command\BaseCommand;
@@ -16,21 +15,19 @@ use Symfony\Component\Process\Process;
 use Webs\QA\Command\Util;
 
 /**
- * Checks if your application uses dependencies with known security vulnerabilities
+ * Checks if your application uses dependencies with known security vulnerabilities.
  */
 class SecurityChecker extends BaseCommand
 {
     /**
-     * Console description
+     * Console description.
      *
      * @var string
      */
     protected $description = 'SecurityChecker';
 
     /**
-     * Console params configuration
-     *
-     * @return void
+     * Console params configuration.
      */
     protected function configure()
     {
@@ -38,11 +35,12 @@ class SecurityChecker extends BaseCommand
     }
 
     /**
-     * Execution
+     * Execution.
      *
-     * @param  InputInterface  $input  Input console
-     * @param  OutputInterface $output Output console
-     * @return integer                 Exit code
+     * @param InputInterface  $input  Input console
+     * @param OutputInterface $output Output console
+     *
+     * @return int Exit code
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {

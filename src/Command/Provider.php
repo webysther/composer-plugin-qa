@@ -1,11 +1,10 @@
 <?php
 
 /**
- * Composer Plugin QA
+ * Composer Plugin QA.
  *
  * @author Webysther Nunes <webysther@gmail.com>
  */
-
 namespace Webs\QA\Command;
 
 use Composer\Plugin\Capability\CommandProvider as CommandProviderCapability;
@@ -22,18 +21,21 @@ use Webs\QA\Command\Test\ParaTest as ParaTest;
 use Webs\QA\Command\Test\Test as Test;
 
 /**
- * Provider of commands for plugin
+ * Provider of commands for plugin.
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Provider implements CommandProviderCapability
 {
     /**
-     * Return list of commands
+     * Return list of commands.
      *
      * @return array List
      */
     public function getCommands()
     {
         $short = new ProviderShort();
+
         return array_merge(
             $short->getCommands(),
             array(
@@ -48,7 +50,7 @@ class Provider implements CommandProviderCapability
                 new PHPCSFixer(),
                 new PHPMetrics(),
                 new SecurityChecker(),
-                new Test()
+                new Test(),
             )
         );
     }
