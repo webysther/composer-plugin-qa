@@ -75,7 +75,8 @@ class CodeCoverage extends BaseCommand
             $source = ' '.$util->checkSource($input);
         }
 
-        (new Process('rm -rf coverage'))->run();
+        $process = new Process('rm -rf coverage');
+        $process->run();
         mkdir('coverage');
 
         $cmd = $paratest.$source.' --colors --coverage-php=coverage/result.cov';
@@ -110,7 +111,8 @@ class CodeCoverage extends BaseCommand
         );
         $coverage = end($matches);
 
-        (new Process('rm -rf coverage'))->run();
+        $process = new Process('rm -rf coverage');
+        $process->run();
 
         $end = microtime(true);
         $time = round($end - $start);
