@@ -10,16 +10,16 @@ namespace Webs\QA\Command;
 
 use Composer\Plugin\Capability\CommandProvider as CommandProviderCapability;
 use Webs\QA\Command\CodeBeautifierFixer\CodeBeautifierFixer as CodeBeautifierFixer;
-use Webs\QA\Command\CodeBeautifierFixer\CodeCoverage as CodeCoverage;
-use Webs\QA\Command\CodeBeautifierFixer\CodeSniffer as CodeSniffer;
-use Webs\QA\Command\CodeBeautifierFixer\CopyPasteDetector as CopyPasteDetector;
-use Webs\QA\Command\CodeBeautifierFixer\LineOfCode as LineOfCode;
-use Webs\QA\Command\CodeBeautifierFixer\MessDetector as MessDetector;
-use Webs\QA\Command\CodeBeautifierFixer\PHPCSFixer as PHPCSFixer;
-use Webs\QA\Command\CodeBeautifierFixer\PHPMetrics as PHPMetrics;
-use Webs\QA\Command\CodeBeautifierFixer\SecurityChecker as SecurityChecker;
-use Webs\QA\Command\CodeBeautifierFixer\Test as ParaTest;
-use Webs\QA\Command\CodeBeautifierFixer\Test as Test;
+use Webs\QA\Command\CodeCoverage\CodeCoverage as CodeCoverage;
+use Webs\QA\Command\CodeSniffer\CodeSniffer as CodeSniffer;
+use Webs\QA\Command\CopyPasteDetector\CopyPasteDetector as CopyPasteDetector;
+use Webs\QA\Command\LineOfCode\LineOfCode as LineOfCode;
+use Webs\QA\Command\MessDetector\MessDetector as MessDetector;
+use Webs\QA\Command\PHPCSFixer\PHPCSFixer as PHPCSFixer;
+use Webs\QA\Command\PHPMetrics\PHPMetrics as PHPMetrics;
+use Webs\QA\Command\SecurityChecker\SecurityChecker as SecurityChecker;
+use Webs\QA\Command\Test\ParaTest as ParaTest;
+use Webs\QA\Command\Test\Test as Test;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
