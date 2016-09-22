@@ -14,9 +14,18 @@ script:
   - composer self-update || true
   # For faster installing
   - composer global require hirak/prestissimo
+  # self install
+  - composer global require webysther/composer-plugin-qa
   # Validate composer.json file.
   - composer validate
   # Try to install all requirements.
   - composer update
-  # Check if there is a security issue with the required packages.
-  - vendor/bin/security-checker security:check
+  # Self QA
+  - composer qa:code-beautifier-fixer
+  - composer qa:code-sniffer
+  - composer qa:copy-paste-detector
+  - composer qa:line-of-code
+  - composer qa:mess-detector
+  - composer qa:php-cs-fixer
+  - composer qa:php-metrics
+  - composer qa:security-checker
