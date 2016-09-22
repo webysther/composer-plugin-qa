@@ -1,5 +1,11 @@
 <?php
 
+/**
+ * Composer Plugin QA
+ *
+ * @author Webysther Nunes <webysther@gmail.com>
+ */
+
 namespace Webs\QA\Command;
 
 use Composer\Command\BaseCommand;
@@ -10,6 +16,9 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\Process\Process;
 
+/**
+ * Detects violations of a defined set of coding standards
+ */
 class CodeSniffer extends BaseCommand
 {
     protected $description = 'Code Sniffer';

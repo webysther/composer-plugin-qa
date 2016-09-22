@@ -1,5 +1,11 @@
 <?php
 
+/**
+ * Composer Plugin QA
+ *
+ * @author Webysther Nunes <webysther@gmail.com>
+ */
+
 namespace Webs\QA\Command;
 
 use Composer\Command\BaseCommand;
@@ -10,6 +16,9 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Process\Process;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
+/**
+ * A tool to automatically fix coding standards issues
+ */
 class PHPCSFixer extends BaseCommand
 {
     protected $description = 'PHP Code Sniffer Fixer';

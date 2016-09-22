@@ -1,5 +1,11 @@
 <?php
 
+/**
+ * Composer Plugin QA
+ *
+ * @author Webysther Nunes <webysther@gmail.com>
+ */
+
 namespace Webs\QA\Command;
 
 use Composer\Command\BaseCommand;
@@ -9,6 +15,9 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
+/**
+ * Group command to run 'Code Beautifier and Fixer' and 'PHP Code Sniffer Fixer'
+ */
 class Fixer extends BaseCommand
 {
     protected $description = 'Run qa:code-beautifier-fixer and qa:php-cs-fixer';

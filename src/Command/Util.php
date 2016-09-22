@@ -1,11 +1,20 @@
 <?php
 
+/**
+ * Composer Plugin QA
+ *
+ * @author Webysther Nunes <webysther@gmail.com>
+ */
+
 namespace Webs\QA\Command;
 
-use Symfony\Component\Process\Process;
-use Symfony\Component\Process\Exception\ProcessFailedException;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Process\Exception\ProcessFailedException;
+use Symfony\Component\Process\Process;
 
+/**
+ * Utility for repository (git) checking
+ */
 class Util
 {
     protected $source = array('src', 'app', 'tests');

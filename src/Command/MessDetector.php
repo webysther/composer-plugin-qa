@@ -1,5 +1,11 @@
 <?php
 
+/**
+ * Composer Plugin QA
+ *
+ * @author Webysther Nunes <webysther@gmail.com>
+ */
+
 namespace Webs\QA\Command;
 
 use Composer\Command\BaseCommand;
@@ -10,6 +16,9 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\Process\Process;
 
+/**
+ * User friendly frontend application for the raw metrics stream measured by PHP Depend
+ */
 class MessDetector extends BaseCommand
 {
     protected $description = 'Mess Detector';

@@ -1,5 +1,11 @@
 <?php
 
+/**
+ * Composer Plugin QA
+ *
+ * @author Webysther Nunes <webysther@gmail.com>
+ */
+
 namespace Webs\QA\Command;
 
 use Composer\Command\BaseCommand;
@@ -10,6 +16,9 @@ use Symfony\Component\Console\Output\NullOutput;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
+/**
+ * Run all tests, ignore short version
+ */
 class All extends BaseCommand
 {
     protected $description = 'Run all tools';

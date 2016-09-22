@@ -1,8 +1,16 @@
 <?php
 
+/**
+ * Composer Plugin QA
+ *
+ * @author Webysther Nunes <webysther@gmail.com>
+ */
+
 namespace Webs\QA\Command;
 
 use Composer\Plugin\Capability\CommandProvider as CommandProviderCapability;
+use Webs\QA\Command\CodeBeautifierFixer\CodeBeautifierFixer as CodeBeautifierFixer;
+use Webs\QA\Command\CodeBeautifierFixer\CBF as CBF;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
