@@ -14,6 +14,7 @@ use Webs\QA\Command\CodeCoverage\CodeCoverage as CodeCoverage;
 use Webs\QA\Command\CodeSniffer\CodeSniffer as CodeSniffer;
 use Webs\QA\Command\CopyPasteDetector\CopyPasteDetector as CopyPasteDetector;
 use Webs\QA\Command\LineOfCode\LineOfCode as LineOfCode;
+use Webs\QA\Command\Lint\Lint as Lint;
 use Webs\QA\Command\MessDetector\MessDetector as MessDetector;
 use Webs\QA\Command\PHPCSFixer\PHPCSFixer as PHPCSFixer;
 use Webs\QA\Command\PHPMetrics\PHPMetrics as PHPMetrics;
@@ -46,6 +47,7 @@ class Provider implements CommandProviderCapability
                 new CopyPasteDetector(),
                 new Fixer(),
                 new LineOfCode(),
+                new Lint(),
                 new MessDetector(),
                 new ParaTest(),
                 new PHPCSFixer(),
