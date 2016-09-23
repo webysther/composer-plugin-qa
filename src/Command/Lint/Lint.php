@@ -73,31 +73,12 @@ class Lint extends BaseCommand
             $source = $util->getDiffSource();
         }
 
-        $files = array();
-        $sources = explode(' ', $source);
-        foreach ($sources as $source) {
-            if(!is_dir($source)){
-                $files[] = $source;
-                continue;
-            }
-
-            $recursiveFiles = new RecursiveIteratorIterator(
-                new RecursiveDirectoryIterator($source)
-            );
-            foreach ($recursiveFiles as $file) {
-                if ($file->isDir()){
-                    continue;
-                }
-                $files[] = $file->getPathname();
-            }
-        }
-
-        $sources = $files;
+        $sources = $this->getAllFiles(explode(' ', $source));
         $exitCode = 0;
         $columnSize = 80;
         $errors = '';
         foreach ($sources as $line => $source) {
-            if( ($line % $columnSize) == 0 ) {
+            if (($line % $columnSize) == 0) {
                 $style->newLine();
             }
 
@@ -109,7 +90,7 @@ class Lint extends BaseCommand
                     return;
                 }
 
-                $command->output->write('<error>F</>');
+                $command->output->write('<error>E</>');
                 $errors = $buffer;
             });
 
@@ -127,10 +108,45 @@ class Lint extends BaseCommand
 
         $style->section('Results');
         $output->writeln('<info>Command: php -l FILE</>');
-        $output->writeln('<info>Files: ' . count($files) . '</>');
+        $output->writeln('<info>Files: ' . count($sources) . '</>');
         $output->writeln('<info>Time: '.$time.' seconds</>');
         $style->newLine();
 
         return $exitCode;
+    }
+
+    /**
+     * Check how of list is dir and find all files
+     *
+     * @param  array $sources List of files/dirs
+     * @return array          List of files only
+     */
+    public function getAllFiles($sources)
+    {
+        $files = array();
+        foreach ($sources as $source) {
+            if (!is_dir($source)) {
+                $files[] = $source;
+                continue;
+            }
+
+            $recursiveFiles = new RecursiveIteratorIterator(
+                new RecursiveDirectoryIterator($source)
+            );
+            foreach ($recursiveFiles as $file) {
+                if ($file->isDir()) {
+                    continue;
+                }
+
+                $path = $file->getPathname();
+                $info = pathinfo(basename($path));
+
+                if (array_key_exists('extension', $info) && $info['extension'] == 'php') {
+                    $files[] = $path;
+                }
+            }
+        }
+
+        return $files;
     }
 }
