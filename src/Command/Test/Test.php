@@ -107,6 +107,7 @@ class Test extends BaseCommand
         $end = microtime(true);
         $time = round($end - $start);
 
+        $style->newLine();
         $style->section('Results');
         $output->writeln('<info>Time: '.$time.' seconds</>');
         $style->newLine();
