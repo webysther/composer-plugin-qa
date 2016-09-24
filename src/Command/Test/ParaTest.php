@@ -97,7 +97,6 @@ class ParaTest extends BaseCommand
 
         $cmd = $test.$source.' --colors'.$stopFail;
         $output->writeln('<info>Command: '.$cmd.'</>');
-        $style->newLine();
         $process = new Process($cmd);
         $process->setTimeout(3600)->run(function ($type, $buffer) use ($command) {
             if (Process::ERR == $type) {
@@ -108,6 +107,7 @@ class ParaTest extends BaseCommand
         $end = microtime(true);
         $time = round($end - $start);
 
+        $style->newLine();
         $style->section('Results');
         $output->writeln('<info>Time: '.$time.' seconds</>');
         $style->newLine();
