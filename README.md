@@ -17,28 +17,6 @@ Comprehensive [plugin for composer](https://getcomposer.org/doc/articles/plugins
 - Total Execution time
 - Command executed by the wrapper
 
-## Sample
-
-```bash
-$ cd /sample
-$ composer qa:cpd
-
-Running Copy/Paste Detector...
-phpcpd 2.0.4 by Sebastian Bergmann.
-
-
-Found 1 exact clones with 654 duplicated lines in 2 files:
- 
-  -	/sample/tests/Folha/Durin/Models/News/NewstextTest.php:73-132
- 	/sample/tests/Folha/Durin/Adapters/Resource/News/NewstextResourceTest.php:59-118
- 
-0.08% duplicated lines out of 58771 total lines of code.
-
-Time: 1.31 seconds, Memory: 46.25MB
-
-Command executed `phpcpd app tests --ansi --fuzzy` in 1 seconds
-```
-
 ## Install
 
 Add to composer.json:
@@ -64,13 +42,32 @@ $ composer list
 
 ![](https://pbs.twimg.com/media/CtOb2zfXYAAQ21O.jpg)
 
-All plugins (except ```qa:test```) have the short version, example,```qa:sc``` is short version for ```qa:security-checker```.
+Almost commands have the short version, example,```qa:sec``` is short version for ```qa:security-checker```.
 
-## PHP Quality Assurance Tools
+## Sample
 
-This is a composer meta package for installing PHP Quality Assurance Tools with only one dependency, based on [h4cc/phpqatools](https://github.com/h4cc/phpqatools).
+Run Code Sniffer to all source code (```composer qa:cs``` is a short version):
 
-Included in this package (based on [phpqatools](http://phpqatools.org/)) are:
+![](https://pbs.twimg.com/media/CtOelj1WYAAHqrS.jpg)
+
+If you change some peace of code e need run for this change:
+
+![](https://pbs.twimg.com/media/CtOeVnyWYAAfQMx.jpg:large)
+
+Is possibile to point for diretory or file:
+
+```bash
+$ composer qa:cs app/ACME
+$ composer qa:cs app/ACME/Bomb.php
+```
+
+To see options for any QA command:
+
+```bash
+$ composer qa:cpd --help
+```
+
+## List of PHP Quality Assurance Tools
 
 - [PHPUnit](https://github.com/sebastianbergmann/phpunit): Testing Framework
 - [PHPCOV](https://github.com/sebastianbergmann/phpcov): CLI frontend for the [PHP_CodeCoverage](https://github.com/sebastianbergmann/php-code-coverage)
