@@ -60,29 +60,9 @@ List the options
 
 ```bash
 $ composer list
- qa
-  qa:all                    Run all tools
-  qa:code-coverage          Code Coverage
-  qa:cc                     Code Coverage
-  qa:code-beautifier-fixer  Code Beautifier and Fixer
-  qa:cbf                    Code Beautifier and Fixer
-  qa:copy-paste-detector    Copy/Paste Detector
-  qa:cpd                    Copy/Paste Detector
-  qa:code-sniffer           Code Sniffer
-  qa:cs                     Code Sniffer
-  qa:php-cs-fixer           PHP Code Sniffer Fixer
-  qa:csf                    PHP Code Sniffer Fixer
-  qa:line-of-code           Line of Code
-  qa:loc                    Line of Code
-  qa:mess-detector          Mess Detector
-  qa:md                     Mess Detector
-  qa:php-metrics            PHP Metrics
-  qa:pm                     PHP Metrics
-  qa:security-checker       SecurityChecker
-  qa:sc                     SecurityChecker
-  qa:test                   Tests
-
 ```
+
+![](https://pbs.twimg.com/media/CtOb2zfXYAAQ21O.jpg)
 
 All plugins (except ```qa:test```) have the short version, example,```qa:sc``` is short version for ```qa:security-checker```.
 
