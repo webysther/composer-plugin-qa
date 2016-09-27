@@ -88,6 +88,7 @@ class CodeCoverage extends BaseCommand
 
         $cov = $util->checkBinary('phpcov');
         $cmd = $cov.' merge --text --show-colors coverage';
+        $style->newLine();
         $output->writeln('<info>Command: '.$cmd.'</>');
         $style->newLine();
         $process = new Process($cmd);
