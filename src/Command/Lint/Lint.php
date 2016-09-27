@@ -1,11 +1,5 @@
 <?php
 
-/**
- * Composer Plugin QA.
- *
- * @author Webysther Nunes <webysther@gmail.com>
- */
-
 namespace Webs\QA\Command\Lint;
 
 use Composer\Command\BaseCommand;
@@ -20,7 +14,7 @@ use Symfony\Component\Process\Process;
 use Webs\QA\Command\Util;
 
 /**
- * Run PHP -l (lint) for all PHP files in project
+ * Run PHP -l (lint) for all PHP files in project.
  */
 class Lint extends BaseCommand
 {
@@ -86,6 +80,7 @@ class Lint extends BaseCommand
             $process->setTimeout(3600)->run(function ($type, $buffer) use ($style, &$errors) {
                 if (strpos($buffer, 'No syntax errors') !== false || Process::ERR == $type) {
                     $style->write('.');
+
                     return;
                 }
 
@@ -107,7 +102,7 @@ class Lint extends BaseCommand
 
         $style->section('Results');
         $output->writeln('<info>Command: php -l FILE</>');
-        $output->writeln('<info>Files: ' . count($sources) . '</>');
+        $output->writeln('<info>Files: '.count($sources).'</>');
         $output->writeln('<info>Time: '.$time.' seconds</>');
         $style->newLine();
 
@@ -115,10 +110,11 @@ class Lint extends BaseCommand
     }
 
     /**
-     * Check how of list is dir and find all files
+     * Check how of list is dir and find all files.
      *
-     * @param  array $sources List of files/dirs
-     * @return array          List of files only
+     * @param array $sources List of files/dirs
+     *
+     * @return array List of files only
      */
     public function getAllFiles($sources)
     {

@@ -1,11 +1,5 @@
 <?php
 
-/**
- * Composer Plugin QA.
- *
- * @author Webysther Nunes <webysther@gmail.com>
- */
-
 namespace Webs\QA\Command\PHPMetrics;
 
 use Composer\Command\BaseCommand;
