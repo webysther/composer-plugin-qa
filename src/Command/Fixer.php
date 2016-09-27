@@ -37,7 +37,7 @@ class Fixer extends BaseCommand
             ->addArgument(
                 'source',
                 InputArgument::IS_ARRAY | InputArgument::OPTIONAL,
-                'List of directories to search  Default:src,app,tests'
+                'List of directories/files to search <comment>[Default:"src,app,tests"]</>'
             )
             ->addOption(
                 'standard',
@@ -61,6 +61,7 @@ class Fixer extends BaseCommand
         $start = microtime(true);
         $commands = array('qa:cbf', 'qa:csf');
         $style = new SymfonyStyle($input, $output);
+        $style->setDecorated(true);
         $output->write(sprintf("\033\143"));
 
         foreach ($commands as $command) {

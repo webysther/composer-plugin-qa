@@ -39,7 +39,7 @@ class PHPCSFixer extends BaseCommand
             ->addArgument(
                 'source',
                 InputArgument::IS_ARRAY | InputArgument::OPTIONAL,
-                'List of directories to search <comment>[Default:"src,app,tests"]</>'
+                'List of directories/files to search <comment>[Default:"src,app,tests"]</>'
             )
             ->addOption(
                 'standard',
@@ -74,6 +74,7 @@ class PHPCSFixer extends BaseCommand
     {
         $start = microtime(true);
         $style = new SymfonyStyle($input, $output);
+        $style->setDecorated(true);
         $style->title($this->description);
 
         $util = new Util();

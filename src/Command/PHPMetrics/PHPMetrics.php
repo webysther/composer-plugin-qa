@@ -39,7 +39,7 @@ class PHPMetrics extends BaseCommand
             ->addArgument(
                 'source',
                 InputArgument::IS_ARRAY | InputArgument::OPTIONAL,
-                'List of directories to search <comment>[Default:"src,app,tests"]</>'
+                'List of directories/files to search <comment>[Default:"src,app,tests"]</>'
             )
             ->addOption(
                 'diff',
@@ -60,9 +60,8 @@ class PHPMetrics extends BaseCommand
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $start = microtime(true);
-        $this->output = $output;
-        $command = $this;
         $style = new SymfonyStyle($input, $output);
+        $style->setDecorated(true);
         $style->title($this->description);
 
         $util = new Util();
@@ -81,11 +80,11 @@ class PHPMetrics extends BaseCommand
             $output->writeln('<info>Command: '.$cmd.'</>');
             $style->newLine();
             $process = new Process($cmd);
-            $process->setTimeout(3600)->run(function ($type, $buffer) use ($command) {
+            $process->setTimeout(3600)->run(function ($type, $buffer) use ($style) {
                 if (strpos($buffer, ']') !== false || Process::ERR == $type) {
                     return;
                 }
-                $command->output->write($buffer);
+                $style->write($buffer);
             });
 
             if (!$exitCode) {

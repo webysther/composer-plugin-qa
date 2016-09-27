@@ -62,9 +62,8 @@ class Lint extends BaseCommand
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $start = microtime(true);
-        $this->output = $output;
-        $command = $this;
         $style = new SymfonyStyle($input, $output);
+        $style->setDecorated(true);
         $style->title($this->description);
 
         $util = new Util();
@@ -84,13 +83,13 @@ class Lint extends BaseCommand
 
             $cmd = 'php -l '.$source;
             $process = new Process($cmd);
-            $process->setTimeout(3600)->run(function ($type, $buffer) use ($command, &$errors) {
+            $process->setTimeout(3600)->run(function ($type, $buffer) use ($style, &$errors) {
                 if (strpos($buffer, 'No syntax errors') !== false || Process::ERR == $type) {
-                    $command->output->write('.');
+                    $style->write('.');
                     return;
                 }
 
-                $command->output->write('<error>E</>');
+                $style->write('<error>E</>');
                 $errors = $buffer;
             });
 

@@ -61,6 +61,7 @@ class MessDetector extends BaseCommand
     {
         $start = microtime(true);
         $style = new SymfonyStyle($input, $output);
+        $style->setDecorated(true);
         $style->title($this->description);
 
         $util = new Util();

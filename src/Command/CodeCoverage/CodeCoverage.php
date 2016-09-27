@@ -62,9 +62,8 @@ class CodeCoverage extends BaseCommand
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $start = microtime(true);
-        $this->output = $output;
-        $command = $this;
         $style = new SymfonyStyle($input, $output);
+        $style->setDecorated(true);
         $style->title($this->description);
 
         $util = new Util();
@@ -84,8 +83,8 @@ class CodeCoverage extends BaseCommand
         $output->writeln('<info>Command: '.$cmd.'</>');
         $process = new Process($cmd);
         $process->setTimeout(3600);
-        $process->run(function ($type, $buffer) use ($command) {
-            $command->output->write($buffer);
+        $process->run(function ($type, $buffer) use ($style) {
+            $style->write($buffer);
         });
         $exitCode = $process->getExitCode();
 
@@ -98,8 +97,8 @@ class CodeCoverage extends BaseCommand
         $output->writeln('<info>Command: '.$cmd.'</>');
         $style->newLine();
         $process = new Process($cmd);
-        $process->run(function ($type, $buffer) use ($command) {
-            $command->output->write($buffer);
+        $process->run(function ($type, $buffer) use ($style) {
+            $style->write($buffer);
         });
 
         $cmd = $cov.' merge --text coverage';

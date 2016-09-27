@@ -57,6 +57,7 @@ class All extends BaseCommand
         $provider = new Provider();
         $commands = $provider->getCommands();
         $style = new SymfonyStyle($input, $output);
+        $style->setDecorated(true);
         $output->write(sprintf("\033\143"));
         $style->title('Running all');
         $ignore = array('qa:all', 'qa:fixer', 'qa:paratest');
