@@ -81,7 +81,7 @@ class CodeCoverage extends BaseCommand
 
         $cmd = $paratest.$source.' --colors --coverage-php=coverage/result.cov';
 
-        if($input->getOption('html')){
+        if ($input->getOption('html')) {
             $cmd = $paratest.$source.' --colors --coverage-html=coverage';
         }
 
@@ -97,8 +97,9 @@ class CodeCoverage extends BaseCommand
             return $exitCode;
         }
 
-        if($input->getOption('html')){
+        if ($input->getOption('html')) {
             $output->writeln('Open the file ./coverage/index.html');
+
             return 0;
         }
 
