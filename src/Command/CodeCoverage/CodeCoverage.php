@@ -42,6 +42,12 @@ class CodeCoverage extends BaseCommand
                 'Fail if covered lines is less than the value.',
                 80
             )
+            ->addOption(
+                'html',
+                null,
+                InputOption::VALUE_REQUIRED,
+                'Dump HTML format of coverage'
+            )
             ->setDescription($this->description);
     }
 
@@ -74,6 +80,11 @@ class CodeCoverage extends BaseCommand
         mkdir('coverage');
 
         $cmd = $paratest.$source.' --colors --coverage-php=coverage/result.cov';
+
+        if($input->getOption('html')){
+            $cmd = $paratest.$source.' --colors --coverage-html=coverage';
+        }
+
         $output->writeln('<info>Command: '.$cmd.'</>');
         $process = new Process($cmd);
         $process->setTimeout(3600);
@@ -84,6 +95,11 @@ class CodeCoverage extends BaseCommand
 
         if ($exitCode) {
             return $exitCode;
+        }
+
+        if($input->getOption('html')){
+            $output->writeln('Open the file ./coverage/index.html');
+            return 0;
         }
 
         $cov = $util->checkBinary('phpcov');
