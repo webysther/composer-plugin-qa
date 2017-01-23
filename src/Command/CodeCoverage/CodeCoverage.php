@@ -45,7 +45,7 @@ class CodeCoverage extends BaseCommand
             ->addOption(
                 'html',
                 null,
-                InputOption::VALUE_REQUIRED,
+                InputOption::VALUE_NONE,
                 'Dump HTML format of coverage'
             )
             ->setDescription($this->description);
