@@ -1,5 +1,5 @@
 {
-    "name": "webysther/composer-plugin-qa",
+    "name": "folha/composer-plugin-qa",
     "description": "A full featured composer plugin for PHP QA Tools.",
     "keywords": ["php", "qa", "tools"],
     "type": "composer-plugin",
@@ -7,7 +7,7 @@
     "authors": [
         {
             "name": "Webysther Nunes",
-            "email": "webysther@gmail.com"
+            "email": "webysther.faria@grupofolha.com.br"
         }
     ],
     "require": {
@@ -15,10 +15,10 @@
         "composer-plugin-api": "^1.0"
     },
     "require-dev": {
-        "webysther/composer-meta-qa": "~1.0.2"
+        "folha/composer-meta-qa": "~1.0.2"
     },
     "suggest": {
-        "webysther/composer-meta-qa": "Automatic install all QA tools",
+        "folha/composer-meta-qa": "Automatic install all QA tools",
         "hirak/prestissimo": "Composer parallel install plugin"
     },
     "autoload": {
