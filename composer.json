@@ -1,5 +1,5 @@
 {
-    "name": "webysther/composer-plugin-qa",
+    "name": "folhasp/composer-plugin-qa",
     "description": "A full featured composer plugin for PHP QA Tools.",
     "keywords": ["php", "qa", "tools"],
     "type": "composer-plugin",
@@ -15,10 +15,10 @@
         "composer-plugin-api": "^1.0"
     },
     "require-dev": {
-        "webysther/composer-meta-qa": "~1.0.2"
+        "folhasp/composer-meta-qa": "~1.0.2"
     },
     "suggest": {
-        "webysther/composer-meta-qa": "Automatic install all QA tools",
+        "folhasp/composer-meta-qa": "Automatic install all QA tools",
         "hirak/prestissimo": "Composer parallel install plugin"
     },
     "autoload": {

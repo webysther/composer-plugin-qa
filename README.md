@@ -1,8 +1,8 @@
-[![Travis](https://img.shields.io/travis/Webysther/composer-plugin-qa.svg?style=flat-square)](https://travis-ci.org/Webysther/composer-plugin-qa)
-[![Travis](https://img.shields.io/badge/HHVM-tested-orange.svg?style=flat-square&maxAge=3600)](https://travis-ci.org/Webysther/composer-plugin-qa)
+[![Travis](https://img.shields.io/travis/folhasp/composer-plugin-qa.svg?style=flat-square)](https://travis-ci.org/folhasp/composer-plugin-qa)
+[![Travis](https://img.shields.io/badge/HHVM-tested-orange.svg?style=flat-square&maxAge=3600)](https://travis-ci.org/folhasp/composer-plugin-qa)
 [![Minimum PHP Version](https://img.shields.io/badge/php-%3E%3D%205.3-8892BF.svg?style=flat-square&maxAge=3600)](https://php.net/)
-[![Packagist](https://img.shields.io/packagist/v/Webysther/composer-plugin-qa.svg?style=flat-square)](https://packagist.org/packages/webysther/composer-plugin-qa)
-[![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg?style=flat-square&maxAge=3600)](https://raw.githubusercontent.com/Webysther/composer-plugin-qa/master/LICENSE)
+[![Packagist](https://img.shields.io/packagist/v/folhasp/composer-plugin-qa.svg?style=flat-square)](https://packagist.org/packages/folhasp/composer-plugin-qa)
+[![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg?style=flat-square&maxAge=3600)](https://raw.githubusercontent.com/folhasp/composer-plugin-qa/master/LICENSE)
 
 # Composer Plugin for QA
 
@@ -23,15 +23,15 @@ Add to composer.json:
 
 ```json
 "require-dev": {
-    "webysther/composer-plugin-qa": "~1.0",
-    "webysther/composer-meta-qa": "~1.0"
+    "folhasp/composer-plugin-qa": "~1.0",
+    "folhasp/composer-meta-qa": "~1.0"
 }
 ```
 
 Or install globally:
 
 ```bash
-composer global require webysther/composer-plugin-qa
+composer global require folhasp/composer-plugin-qa
 ```
 
 List the options
