@@ -3,6 +3,7 @@
 [![Minimum PHP Version](https://img.shields.io/badge/php-%3E%3D%205.3-8892BF.svg?style=flat-square&maxAge=3600)](https://php.net/)
 [![Packagist](https://img.shields.io/packagist/v/Webysther/composer-plugin-qa.svg?style=flat-square)](https://packagist.org/packages/webysther/composer-plugin-qa)
 [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg?style=flat-square&maxAge=3600)](https://raw.githubusercontent.com/Webysther/composer-plugin-qa/master/LICENSE)
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2FWebysther%2Fcomposer-plugin-qa.svg?type=shield)](https://app.fossa.io/projects/git%2Bgithub.com%2FWebysther%2Fcomposer-plugin-qa?ref=badge_shield)
 
 # Composer Plugin for QA
 
@@ -88,3 +89,7 @@ Plus:
 Suggest install:
 
 - [Prestissimo](https://github.com/hirak/prestissimo): Composer parallel install plugin
+
+
+## License
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2FWebysther%2Fcomposer-plugin-qa.svg?type=large)](https://app.fossa.io/projects/git%2Bgithub.com%2FWebysther%2Fcomposer-plugin-qa?ref=badge_large)
