@@ -1,10 +1,14 @@
+# NOT MAINTANED ANYMORE
+
+The development of `composer-plugin-qa` was dropped in favor of [phpqa](https://github.com/jakzal/phpqa) which is actively maintained. The project use docker and can less tightly coupled solution. :)
+
+# Composer Plugin for QA
+
 [![Travis](https://img.shields.io/travis/Webysther/composer-plugin-qa.svg?style=flat-square)](https://travis-ci.org/Webysther/composer-plugin-qa)
 [![Travis](https://img.shields.io/badge/HHVM-tested-orange.svg?style=flat-square&maxAge=3600)](https://travis-ci.org/Webysther/composer-plugin-qa)
 [![Minimum PHP Version](https://img.shields.io/badge/php-%3E%3D%205.3-8892BF.svg?style=flat-square&maxAge=3600)](https://php.net/)
 [![Packagist](https://img.shields.io/packagist/v/Webysther/composer-plugin-qa.svg?style=flat-square)](https://packagist.org/packages/webysther/composer-plugin-qa)
 [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg?style=flat-square&maxAge=3600)](https://raw.githubusercontent.com/Webysther/composer-plugin-qa/master/LICENSE)
-
-# Composer Plugin for QA
 
 Comprehensive [plugin for composer](https://getcomposer.org/doc/articles/plugins.md#creating-a-plugin)
  to execute [PHP QA Tools](http://phpqatools.org) in a uniform and simple way.
